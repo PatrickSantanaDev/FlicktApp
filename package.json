@@ -16,7 +16,7 @@
     "react-native": "0.72.6",
     "react-native-paper": "4.9.2",
     "react-native-snap-carousel": "^3.9.1",
-    "react-native-web": "~0.19.6"
+    "react-native-web": "~0.19.6",
     "expo-linear-gradient": "~12.1.2"
   },
   "devDependencies": {
