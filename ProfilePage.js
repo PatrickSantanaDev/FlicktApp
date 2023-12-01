@@ -27,8 +27,9 @@ TODO:
 
  */
 import React, {useEffect, useState} from 'react';
-import {View, Text, Button, ScrollView, Image, FlatList} from 'react-native';
+import {View, Text, Button, ScrollView, Image, FlatList, VirtualizedList} from 'react-native';
 import profileStyles from './components/Profile-styles.js'
+import {loadList, saveList} from "./components/SaveAndLoad";
 
 
 
@@ -37,13 +38,24 @@ const OMDB_API_KEY = '942c9b75';
 const ProfilePage = ({ user }) => {
     const [showStats, setShowStats] = useState(false);
     const [movies, setMovies] = useState([]);
+    const[friends,setFriends]= useState([]);
+    const[interests, setInterests] = useState([]);
+    const [avatar, setAvatar] = useState('assets/snack-icon.png');
     // Mock user data for demonstration
     useEffect(() => {
+        const movieurladress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movies'+ user.username +"}";
+        loadList(movieurladress,movies,setMovies);
+        /*const friendsurladress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={friends'+ user.name+"}";
+        loadList(friendsurladress,friends,setFriends);
+        const intrestsurladress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={intrests'+ user.name+"}";
+        loadList(intrestsurladress,interests,setInterests);
+        const avatarsurladress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={avatar'+ user.name+"}";
+        loadList(avatarsurladress,avatar,setAvatar);*/
         const searchMovies = async () => {
 
             try {
                 const responses = await Promise.all(
-                    user.recMovies.map((keyword) =>
+                    movies.map((keyword) =>
                         fetch(
                             `http://www.omdbapi.com/?t=${encodeURIComponent(
                                 keyword
@@ -51,14 +63,15 @@ const ProfilePage = ({ user }) => {
                         ).then((response) => response.json())
                     )
                 );
-                console.log('API Responses:', responses);
+
 
                 setMovies(responses);
-                console.log(movies)
+
             } catch (error) {
                 console.error(error);
             }
         };
+
         searchMovies();
     }, []);
 
@@ -125,12 +138,14 @@ const ProfilePage = ({ user }) => {
                 <Text style={profileStyles.label}>Recommended Movies:</Text>
                 <View style={profileStyles.iconsContainer}>
 
-                    <FlatList
+                    <VirtualizedList
                         data={movies}
                         horizontal={true}
                         showsHorizontalScrollIndicator={true}
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={renderMovie}
+                        getItemCount={() => movies.length}
+                        getItem={(data, index) => data[index]}
                         contentContainerStyle={profileStyles.listContainer}
                     />
 
