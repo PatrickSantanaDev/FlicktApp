@@ -4,7 +4,10 @@ TODO:
  */
 
 
-import {StyleSheet} from "react-native";
+
+import {StyleSheet, Dimensions} from 'react-native';
+
+
 var color1 = "background-color:rgb(255, 80, 80);";
 var color2 = "background-color:rgb(230, 58, 58);";
 var color3 = "background-color:rgb(64, 64, 64);";
@@ -19,13 +22,33 @@ const profileStyles = StyleSheet.create({
         paddingTop: 40,
         backgroundColor: color4,
     },
+
     header: {
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 20,
+
     },
     userInfo: {
         marginBottom: 10,
+    },
+    poster: {
+        width: 100, // Define the width as needed
+        height: 150, // Define the height as needed
+        resizeMode: 'cover', // or 'contain' or other resizeMode based on your design
+    },
+    listContainer:{
+        width: Dimensions.get('window').width * 0.95,
+        alignItems: 'center',
+    },
+    movieTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    movieContainer: {
+        alignItems: 'center',
+        marginRight:  10,
     },
     label: {
         fontWeight: 'bold',
