@@ -18,7 +18,6 @@ Right now using this going to change it to grab from class php server using user
 
 
 TODO:
- - ADD get friends function
  - ADD get Interest for php
  - ADD get avatar from php server
  - ADD get stats from php server
@@ -136,9 +135,10 @@ const ProfilePage = ({ user }) => {
                 <Image source={user.avatar} style={profileStyles.profileImage} />
             </View>
 
-            {/*Interests
+            {/*Interests*/}
             <View style={profileStyles.userInfo}>
                 <Text style={profileStyles.label}>Interests:</Text>
+                <View style={profileStyles.iconsContainer}>
                 <VirtualizedList
                     data={interests}
                     horizontal={true}
@@ -149,7 +149,8 @@ const ProfilePage = ({ user }) => {
                     getItem={(data, index) => data[index]}
                     contentContainerStyle={profileStyles.listContainer}
                 />
-            </View>*/}
+                </View>
+            </View>
 
             {/*Friends*/}
             <View style={profileStyles.userInfo}>
