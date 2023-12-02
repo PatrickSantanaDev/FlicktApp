@@ -70,7 +70,14 @@ const profileStyles = StyleSheet.create({
         borderRadius: 75, // To make the image circular
         marginBottom: 20,
     },
+    friendImage: {
+        width: 100,
+        height: 100,
+        borderRadius: 50, // To make the image circular
+        marginBottom: 10,
+    },
 });
+
 
 
 export default profileStyles;

@@ -20,7 +20,6 @@ Right now using this going to change it to grab from class php server using user
 TODO:
  - ADD get friends function
  - ADD get Interest for php
- - ADD get movie recs from php server
  - ADD get avatar from php server
  - ADD get stats from php server
  - Fix styling
@@ -33,6 +32,7 @@ import {loadList, saveList} from "./components/SaveAndLoad";
 
 
 
+
 const OMDB_API_KEY = '942c9b75';
 
 const ProfilePage = ({ user }) => {
@@ -40,17 +40,24 @@ const ProfilePage = ({ user }) => {
     const [movies, setMovies] = useState([]);
     const[friends,setFriends]= useState([]);
     const[interests, setInterests] = useState([]);
-    const [avatar, setAvatar] = useState('assets/snack-icon.png');
+
+
     // Mock user data for demonstration
     useEffect(() => {
-        const movieurladress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movies'+ user.username +"}";
-        loadList(movieurladress,movies,setMovies);
-        /*const friendsurladress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={friends'+ user.name+"}";
-        loadList(friendsurladress,friends,setFriends);
-        const intrestsurladress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={intrests'+ user.name+"}";
-        loadList(intrestsurladress,interests,setInterests);
-        const avatarsurladress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={avatar'+ user.name+"}";
-        loadList(avatarsurladress,avatar,setAvatar);*/
+
+        console.log()
+        var urladress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movies'+ user.username +'}';
+        loadList(urladress,movies,setMovies);
+
+
+         urladress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={friends'+ user.username+'}';
+       loadList(urladress,friends,setFriends);
+
+         urladress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={interests'+ user.username+"}";
+
+        loadList(urladress,interests,setInterests);
+
+
         const searchMovies = async () => {
 
             try {
@@ -66,7 +73,8 @@ const ProfilePage = ({ user }) => {
 
 
                 setMovies(responses);
-
+                console.log(friends);
+                console.log(interests);
             } catch (error) {
                 console.error(error);
             }
@@ -94,15 +102,28 @@ const ProfilePage = ({ user }) => {
         return null;
     };
     const renderMovie = ({ item }) => (
-        <View style={profileStyles.itemContainer}>
-            <View style={profileStyles.imageContainer}>
+        <View>
+            <View >
                 <Image source={{ uri: item.Poster }} style={profileStyles.poster} />
             </View>
             <Text style={profileStyles.userInfo}>{item.Title}</Text>
         </View>
 
     );
+    const renderInterests = ({ item }) => (
+        <View style={profileStyles.movieContainer}>
+            <Text style={profileStyles.movieTitle}>{item.Type}</Text>
+        </View>
+    );
+    const renderFriend = ({ item }) => (
+        <View >
+            <View >
+                <Image source={{uri:item.image}} style={profileStyles.friendImage} />
+            </View>
+            <Text style={profileStyles.userInfo}>{item.key}</Text>
+        </View>
 
+    );
 
     return (
         <View style={profileStyles.container}>
@@ -115,21 +136,35 @@ const ProfilePage = ({ user }) => {
                 <Image source={user.avatar} style={profileStyles.profileImage} />
             </View>
 
-            {/*Interests*/}
+            {/*Interests
             <View style={profileStyles.userInfo}>
                 <Text style={profileStyles.label}>Interests:</Text>
-                <Text>{user.interests.join(', ')}</Text>
-            </View>
+                <VirtualizedList
+                    data={interests}
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={true}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={renderInterests}
+                    getItemCount={() => interests.length}
+                    getItem={(data, index) => data[index]}
+                    contentContainerStyle={profileStyles.listContainer}
+                />
+            </View>*/}
 
             {/*Friends*/}
             <View style={profileStyles.userInfo}>
                 <Text style={profileStyles.label}>Friends:</Text>
                 <View style={profileStyles.iconsContainer}>
-                    <ScrollView horizontal={true} showsHorizontalScrollIndicator={true}  contentContainerStyle={{ flexGrow: 1 }}>
-                        {user.friends.map((friend, index) => (
-                            <View key={index} style={profileStyles.blackBox}></View>
-                        ))}
-                    </ScrollView>
+                    <VirtualizedList
+                        data={friends}
+                        horizontal={true}
+                        showsHorizontalScrollIndicator={true}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={renderFriend}
+                        getItemCount={() => friends.length}
+                        getItem={(data, index) => data[index]}
+                        contentContainerStyle={profileStyles.listContainer}
+                    />
                 </View>
             </View>
 
