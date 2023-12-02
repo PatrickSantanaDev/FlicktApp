@@ -21,6 +21,8 @@ const profileStyles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingTop: 40,
         backgroundColor: color4,
+        height: Dimensions.get('window').height * 1.1,
+
     },
 
     header: {
@@ -30,6 +32,7 @@ const profileStyles = StyleSheet.create({
 
     },
     userInfo: {
+
         marginBottom: 10,
     },
     poster: {
@@ -38,6 +41,7 @@ const profileStyles = StyleSheet.create({
         resizeMode: 'cover', // or 'contain' or other resizeMode based on your design
     },
     listContainer:{
+        flexDirection: 'row',
         width: Dimensions.get('window').width * 0.95,
         alignItems: 'center',
     },
@@ -65,10 +69,10 @@ const profileStyles = StyleSheet.create({
         marginHorizontal: 5,
     },
     profileImage: {
-        width: 150,
-        height: 150,
-        borderRadius: 75, // To make the image circular
-        marginBottom: 20,
+        width: 100,
+        height: 100,
+        borderRadius: 50, // To make the image circular
+        marginBottom: 10,
     },
     friendImage: {
         width: 100,
@@ -76,6 +80,27 @@ const profileStyles = StyleSheet.create({
         borderRadius: 50, // To make the image circular
         marginBottom: 10,
     },
+    avatarContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginRight: 10, // Adjust as needed
+    },
+
+    badgeContainer: {
+        marginRight: 10, // Adjust as needed
+    },
+    badgeImage: {
+        width: 50,
+        height: 50,
+        // Other styling properties as needed
+    },
+    statsContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+
 });
 
 

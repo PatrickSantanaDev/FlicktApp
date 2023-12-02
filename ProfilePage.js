@@ -48,12 +48,10 @@ const ProfilePage = ({ user }) => {
         var urladress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movies'+ user.username +'}';
         loadList(urladress,movies,setMovies);
 
+        urladress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={friends'+ user.username+'}';
+        loadList(urladress,friends,setFriends);
 
-         urladress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={friends'+ user.username+'}';
-       loadList(urladress,friends,setFriends);
-
-         urladress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={interests'+ user.username+"}";
-
+        urladress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={interests'+ user.username+"}";
         loadList(urladress,interests,setInterests);
 
 
@@ -130,9 +128,22 @@ const ProfilePage = ({ user }) => {
             {/*Name of User*/}
             <Text style={profileStyles.header}>{user.name}</Text>
 
-            {/*Profile Picture*/}
             <View style={profileStyles.userInfo}>
-                <Image source={user.avatar} style={profileStyles.profileImage} />
+                <View style={profileStyles.avatarContainer}>
+                    <Image source={user.avatar} style={profileStyles.profileImage} />
+
+                    <Image source={require('./assets/icon.png')} style={profileStyles.badgeImage} />
+                </View>
+            </View>
+            <View style={profileStyles.userInfo}>
+                <View style={profileStyles.iconsContainer}>
+                    {/* Stats */}
+                    <Button
+                        title={showStats ? 'Hide Stats' : 'Show Stats'}
+                        onPress={toggleStats}
+                    />
+                    {renderStats()}
+                </View>
             </View>
 
             {/*Interests*/}
@@ -187,11 +198,7 @@ const ProfilePage = ({ user }) => {
 
                 </View>
             </View>
-            {/*Stats*/}
-            <Button
-                title={showStats ? 'Hide Stats' : 'Show Stats'}
-                onPress={toggleStats}
-            />{renderStats()}
+
         </View>
     );
 
