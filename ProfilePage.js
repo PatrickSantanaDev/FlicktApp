@@ -27,7 +27,8 @@ TODO:
 import React, {useEffect, useState} from 'react';
 import {View, Text, Button, ScrollView, Image, FlatList, VirtualizedList} from 'react-native';
 import profileStyles from './components/Profile-styles.js'
-import {loadList, saveList} from "./components/SaveAndLoad";
+import {saveList, loadList} from "./components/SaveAndLoad";
+
 
 
 
@@ -35,49 +36,37 @@ import {loadList, saveList} from "./components/SaveAndLoad";
 const OMDB_API_KEY = '942c9b75';
 
 const ProfilePage = ({ user }) => {
+    const [getuser,setGetuser] = useState([]);
     const [showStats, setShowStats] = useState(false);
     const [movies, setMovies] = useState([]);
     const[friends,setFriends]= useState([]);
     const[interests, setInterests] = useState([]);
+    const[rates,setRates]=useState([])
+    const[viewed,setViewed] = useState([])
+    const[avatar,setAvatar] = useState('')
 
 
     // Mock user data for demonstration
     useEffect(() => {
+        async function loadList(url, list, setlist) {
 
-        console.log()
-        var urladress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movies'+ user.username +'}';
-        loadList(urladress,movies,setMovies);
+                const response = await fetch(url);
+                const names = await response.json();
+                console.log(names)
+                setlist(names)
+        }
+        var urladress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater'+ user.username +'}';
+        //saveList(urladress, user);
+        loadList(urladress,getuser,setGetuser)
 
-        urladress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={friends'+ user.username+'}';
-        loadList(urladress,friends,setFriends);
-
-        urladress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={interests'+ user.username+"}";
-        loadList(urladress,interests,setInterests);
-
-
-        const searchMovies = async () => {
-
-            try {
-                const responses = await Promise.all(
-                    movies.map((keyword) =>
-                        fetch(
-                            `http://www.omdbapi.com/?t=${encodeURIComponent(
-                                keyword
-                            )}&apikey=${OMDB_API_KEY}`
-                        ).then((response) => response.json())
-                    )
-                );
+        setMovies(getuser.recMovies);
+        setFriends(getuser.friends);
+        setInterests(getuser.interests);
+        setRates(getuser.rates);
+        setAvatar(getuser.avatar);
+        console.log(getuser);
 
 
-                setMovies(responses);
-                console.log(friends);
-                console.log(interests);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
-        searchMovies();
     }, []);
 
 
@@ -90,9 +79,9 @@ const ProfilePage = ({ user }) => {
             return (
                 <View style={profileStyles.userInfo}>
                     <Text style={profileStyles.label}>User Statistics:</Text>
-                    <Text>Viewed: {user.userStats.viewed}</Text>
-                    <Text>Rated: {user.userStats.rated}</Text>
-                    <Text>Recommendations: {user.userStats.recommendations}</Text>
+                    <Text>Viewed: {viewed}</Text>
+                    <Text>Rated: {rated}</Text>
+                    <Text>Recommendations: {movies}</Text>
                 </View>
             );
         }
@@ -117,20 +106,19 @@ const ProfilePage = ({ user }) => {
             <View >
                 <Image source={{uri:item.image}} style={profileStyles.friendImage} />
             </View>
-            <Text style={profileStyles.userInfo}>{item.key}</Text>
+            <Text style={profileStyles.userInfo}>{item.username}</Text>
         </View>
 
     );
 
     return (
         <View style={profileStyles.container}>
-
             {/*Name of User*/}
             <Text style={profileStyles.header}>{user.name}</Text>
 
             <View style={profileStyles.userInfo}>
                 <View style={profileStyles.avatarContainer}>
-                    <Image source={user.avatar} style={profileStyles.profileImage} />
+                    <Image source={{uri:user.avatar}} style={profileStyles.profileImage} />
 
                     <Image source={require('./assets/icon.png')} style={profileStyles.badgeImage} />
                 </View>
@@ -150,16 +138,16 @@ const ProfilePage = ({ user }) => {
             <View style={profileStyles.userInfo}>
                 <Text style={profileStyles.label}>Interests:</Text>
                 <View style={profileStyles.iconsContainer}>
-                <VirtualizedList
-                    data={interests}
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={true}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={renderInterests}
-                    getItemCount={() => interests.length}
-                    getItem={(data, index) => data[index]}
-                    contentContainerStyle={profileStyles.listContainer}
-                />
+                    <VirtualizedList
+                        data={interests}
+                        horizontal={true}
+                        showsHorizontalScrollIndicator={true}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={renderInterests}
+                        getItemCount={() => interests.length}
+                        getItem={(data, index) => data[index]}
+                        contentContainerStyle={profileStyles.listContainer}
+                    />
                 </View>
             </View>
 
