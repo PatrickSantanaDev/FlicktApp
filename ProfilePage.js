@@ -18,25 +18,17 @@ Right now using this going to change it to grab from class php server using user
 
 
 TODO:
- - ADD get Interest for php
  - ADD get avatar from php server
- - ADD get stats from php server
  - Fix styling
 
  */
 import React, {useEffect, useState} from 'react';
-import {View, Text, Button, ScrollView, Image, FlatList, VirtualizedList} from 'react-native';
+import {View, Text, Button, Image, VirtualizedList} from 'react-native';
 import profileStyles from './components/Profile-styles.js'
-import {saveList, loadList} from "./components/SaveAndLoad";
 
-
-
-
-
-const OMDB_API_KEY = '942c9b75';
 
 const ProfilePage = ({ user }) => {
-    const [getuser,setGetuser] = useState([]);
+
     const [showStats, setShowStats] = useState(false);
     const [movies, setMovies] = useState([]);
     const[friends,setFriends]= useState([]);
@@ -48,12 +40,12 @@ const ProfilePage = ({ user }) => {
 
     // Mock user data for demonstration
     useEffect(() => {
-        async function loadList(url, list, setlist) {
+        async function loadList(url) {
 
             const response = await fetch(url);
             const names = await response.json();
             console.log(names)
-            setlist(names)
+
             setMovies(names.recMovies);
             setFriends(names.friends);
             setInterests(names.interests);
@@ -61,12 +53,9 @@ const ProfilePage = ({ user }) => {
             setAvatar(names.avatar);
             setViewed(names.viewed);
         }
-        var urladress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater'+ user.username +'}';
-        //saveList(urladress, user);
-        loadList(urladress,getuser,setGetuser)
+        const urladress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater'+ user.username +'}';
+        loadList(urladress)
 
-
-        console.log(getuser);
 
 
     }, []);
@@ -120,7 +109,7 @@ const ProfilePage = ({ user }) => {
 
             <View style={profileStyles.userInfo}>
                 <View style={profileStyles.avatarContainer}>
-                    <Image source={{uri:user.avatar}} style={profileStyles.profileImage} />
+                    <Image source={{uri: avatar}} style={profileStyles.profileImage} />
 
                     <Image source={require('./assets/icon.png')} style={profileStyles.badgeImage} />
                 </View>
