@@ -59,6 +59,7 @@ const ProfilePage = ({ user }) => {
             setInterests(names.interests);
             setRates(names.rates);
             setAvatar(names.avatar);
+            setViewed(names.viewed);
         }
         var urladress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater'+ user.username +'}';
         //saveList(urladress, user);
@@ -80,9 +81,9 @@ const ProfilePage = ({ user }) => {
             return (
                 <View style={profileStyles.userInfo}>
                     <Text style={profileStyles.label}>User Statistics:</Text>
-                    <Text>Viewed: {viewed}</Text>
-                    <Text>Rated: {rated}</Text>
-                    <Text>Recommendations: {movies}</Text>
+                    <Text>Viewed: {viewed.length}</Text>
+                    <Text>Rated: {rates.length}</Text>
+                    <Text>Recommendations: {movies.length}</Text>
                 </View>
             );
         }
