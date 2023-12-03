@@ -18,7 +18,7 @@ Right now using this going to change it to grab from class php server using user
 
 
 TODO:
- - ADD get avatar from php server
+ - Add Badges to profile
  - Fix styling
 
  */
