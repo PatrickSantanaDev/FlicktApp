@@ -29,6 +29,12 @@ TODO:
 import React, {useEffect, useState} from 'react';
 import {View, Text, Button, Image, VirtualizedList} from 'react-native';
 import profileStyles from './components/Profile-styles.js'
+import gem1Badge from './assets/badges/gem1.png';
+import gem2Badge from './assets/badges/gem2.png';
+import gem3Badge from './assets/badges/gem3.png';
+import gem4Badge from './assets/badges/gem4.png';
+import gem5Badge from './assets/badges/gem5.png';
+import emptyBadge from './assets/badges/empty.png';
 
 
 const ProfilePage = ({ user }) => {
@@ -40,6 +46,7 @@ const ProfilePage = ({ user }) => {
     const[rates,setRates]=useState([])
     const[viewed,setViewed] = useState([])
     const[avatar,setAvatar] = useState('')
+    const[badge,setBadge] = useState('');
 
 
     // Mock user data for demonstration
@@ -56,8 +63,24 @@ const ProfilePage = ({ user }) => {
             setRates(names.rates);
             setAvatar(names.avatar);
             setViewed(names.viewed);
+            const total = movies.length + rates.length;
+
+            if(total >= 10000){
+                setBadge(gem5Badge);
+            } else if(total >= 5000){
+                setBadge(gem4Badge);
+            }else if(total >= 1000){
+                setBadge(gem3Badge);
+            }else if(total >= 500){
+                setBadge(gem2Badge);
+            }else if(total >= 100){
+                setBadge(gem1Badge);
+            } else{
+                setBadge(emptyBadge);
+            }
         }
         const urladress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater'+ user.username +'}';
+
         loadList(urladress)
 
 
@@ -114,8 +137,8 @@ const ProfilePage = ({ user }) => {
             <View style={profileStyles.userInfo}>
                 <View style={profileStyles.avatarContainer}>
                     <Image source={{uri: avatar}} style={profileStyles.profileImage} />
+                    <Image source={badge} style={profileStyles.profileImage} />
 
-                    <Image source={require('./assets/icon.png')} style={profileStyles.badgeImage} />
                 </View>
             </View>
             <View style={profileStyles.userInfo}>
