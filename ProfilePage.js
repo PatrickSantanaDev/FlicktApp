@@ -50,20 +50,21 @@ const ProfilePage = ({ user }) => {
     useEffect(() => {
         async function loadList(url, list, setlist) {
 
-                const response = await fetch(url);
-                const names = await response.json();
-                console.log(names)
-                setlist(names)
+            const response = await fetch(url);
+            const names = await response.json();
+            console.log(names)
+            setlist(names)
+            setMovies(names.recMovies);
+            setFriends(names.friends);
+            setInterests(names.interests);
+            setRates(names.rates);
+            setAvatar(names.avatar);
         }
         var urladress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater'+ user.username +'}';
         //saveList(urladress, user);
         loadList(urladress,getuser,setGetuser)
 
-        setMovies(getuser.recMovies);
-        setFriends(getuser.friends);
-        setInterests(getuser.interests);
-        setRates(getuser.rates);
-        setAvatar(getuser.avatar);
+
         console.log(getuser);
 
 
