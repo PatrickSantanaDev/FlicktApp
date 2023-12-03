@@ -2,6 +2,17 @@
 /*
 It grabs the user from a php server
 and the server stores in this way
+
+
+all you need to call the profile page is
+
+
+const user = {"username":(uername)};
+
+//to display the profile page
+<ProfilePage user={user} />
+
+example of what the php server gets
 {
         "name": 'John Doe',
         "username":'test',
@@ -22,7 +33,6 @@ and the server stores in this way
 
 
 TODO:
- - Add Badges to profile
  - Fix styling
 
  */
