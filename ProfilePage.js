@@ -1,20 +1,24 @@
 
 /*
-Right now using this going to change it to grab from class php server using usernames as
-    interests(Username of user)
-    fav(Username of User)
-    etc.
-
-        name: 'John Doe',
-        avatar: require('./assets/favicon.png'),
-        interests: ['Action', 'Comedy', 'Drama'],
-        friends: ['Friend 1', 'Friend 2', 'Friend 3'],
-        recMovies: ['Movie 1', 'Movie 2', 'Movie 3'],
-        userStats: {
-            viewed: 50,
-            rated: 30,
-            recommendations: 15,
-        }
+It grabs the user from a php server
+and the server stores in this way
+{
+        "name": 'John Doe',
+        "username":'test',
+        "avatar": 'https://cdn-icons-png.flaticon.com/512/147/147142.png',
+        "interests": [{"key":1,"Type":'Action'}, {"key":2,"Type":'Comedy'}, {"key":3,"Type":'Drama'}],
+        "friends": [{"key": "Onur","selected": false,"username": "Onur", "image": "https://cdn.iconscout.com/icon/free/png-256/free-avatar-370-456322.png?f=webp"}],
+        "recMovies": [{"Title":"Deadpool","Year":"2016","Rated":"R","Released":"12 Feb 2016","Runtime":"108 min","Genre":"Action, Comedy","Director":"Tim Miller",
+                        "Writer":"Rhett Reese, Paul Wernick","Actors":"Ryan Reynolds, Morena Baccarin, T.J. Miller",
+                        "Plot":"A wisecracking mercenary gets experimented on and becomes immortal yet hideously scarred, and sets out to track down the man who ruined his looks.",
+                        "Language":"English","Country":"United States","Awards":"29 wins & 78 nominations",
+                        "Poster":"https://m.media-amazon.com/images/M/MV5BYzE5MjY1ZDgtMTkyNC00MTMyLThhMjAtZGI5OTE1NzFlZGJjXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg",
+                        "Ratings":[{"Source":"Internet Movie Database","Value":"8.0/10"},{"Source":"Rotten Tomatoes","Value":"85%"},{"Source":"Metacritic","Value":"65/100"}],
+                        "Metascore":"65","imdbRating":"8.0","imdbVotes":"1,093,938","imdbID":"tt1431045","Type":"movie","DVD":"21 Apr 2016","BoxOffice":"$363,070,709",
+                        "Production":"N/A","Website":"N/A","Response":"True"}],
+        "rates":[{"key":1,"Title":"Deadpool","Rating":5,"Text":'Best Movie Ever'}],
+        "viewed":[{"key":1,"Title":"Deadpool"}],
+    }
 
 
 TODO:
