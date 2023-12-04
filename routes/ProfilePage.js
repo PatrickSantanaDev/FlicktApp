@@ -38,13 +38,13 @@ TODO:
  */
 import React, {useEffect, useState} from 'react';
 import {View, Text, Button, Image, VirtualizedList} from 'react-native';
-import profileStyles from './components/Profile-styles.js'
-import gem1Badge from './assets/badges/gem1.png';
-import gem2Badge from './assets/badges/gem2.png';
-import gem3Badge from './assets/badges/gem3.png';
-import gem4Badge from './assets/badges/gem4.png';
-import gem5Badge from './assets/badges/gem5.png';
-import emptyBadge from './assets/badges/empty.png';
+import profileStyles from '../styles/Profile-styles.js'
+import gem1Badge from '../assets/badges/gem1.png';
+import gem2Badge from '../assets/badges/gem2.png';
+import gem3Badge from '../assets/badges/gem3.png';
+import gem4Badge from '../assets/badges/gem4.png';
+import gem5Badge from '../assets/badges/gem5.png';
+import emptyBadge from '../assets/badges/empty.png';
 
 
 const ProfilePage = ({ user }) => {
@@ -142,7 +142,9 @@ const ProfilePage = ({ user }) => {
     return (
         <View style={profileStyles.container}>
             {/*Name of User*/}
-            <Text style={profileStyles.header}>{user.name}</Text>
+            
+            {/* <Text style={profileStyles.header}>{user.name}</Text> */}     
+            <Text style={profileStyles.header}></Text>
 
             <View style={profileStyles.userInfo}>
                 <View style={profileStyles.avatarContainer}>

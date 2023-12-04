@@ -1,7 +1,7 @@
-import styles from './styles.js';
+import styles from '../styles/Styles.js';
 import React, {useState} from 'react';
 import ImageButton from './ImageButton.js';
-import CustomButton from './CustomButton.js';
+import CustomButton from './Friends-CustomButton.js';
 import { Image, Pressable,TouchableOpacity, Button, FlatList, StyleSheet, Text, View, ListItem } from 'react-native';
 
 const Friend = (props) => {

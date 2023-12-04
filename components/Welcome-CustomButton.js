@@ -1,5 +1,5 @@
 import {Pressable, TouchableOpacity,Text, View, StyleSheet} from 'react-native';
-import styles from './Styles.js';
+import styles from '../styles/Styles.js';
 
 export default function customButton(props) {
   return (

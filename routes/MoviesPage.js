@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, Image, StyleSheet, Dimensions, ScrollView, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import styles from './Styles';
+import styles from '../styles/Styles';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const OMDB_API_KEY = '942c9b75';
 
-export default function Home() {
+export default function MoviesPage() {
   const [movies, setMovies] = useState([]);
   const scrollViewRef = useRef(); // Reference to the ScrollView
   const [currentIndex, setCurrentIndex] = useState(0);

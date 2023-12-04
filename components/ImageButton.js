@@ -1,5 +1,5 @@
 import { Image, Pressable,StatusBar,TouchableOpacity, Button, FlatList, StyleSheet, Text, View, ListItem } from 'react-native';
-import styles from './styles.js';
+import styles from '../styles/Styles.js';
 
 export default function imageButton(props) {
   return (

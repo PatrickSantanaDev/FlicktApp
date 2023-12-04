@@ -13,6 +13,7 @@ var color2 = "background-color:rgb(230, 58, 58);";
 var color3 = "background-color:rgb(64, 64, 64);";
 var outlinecolor1 = "background-color:rgb(255, 20, 200);";
 var color4 = "background-color:rgb(213, 213, 213);";
+
 const profileStyles = StyleSheet.create({
     container: {
         flexGrow: 1,
