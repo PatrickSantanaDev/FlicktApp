@@ -1,17 +1,36 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, Image, StyleSheet, Dimensions, ScrollView, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import styles from '../styles/Styles';
+import styles from '../styles/MovieStyles';
+import { useNavigation } from '@react-navigation/native';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
+
 const OMDB_API_KEY = '942c9b75';
 
-export default function MoviesPage() {
+export default function Home() {
   const [movies, setMovies] = useState([]);
-  const scrollViewRef = useRef(); // Reference to the ScrollView
+  const scrollViewRef = useRef();
   const [currentIndex, setCurrentIndex] = useState(0);
+  const navigation = useNavigation();
+
+  // Function to handle movie selection
+  const handleSelectMovie = async (movie) => {
+    try {
+      const response = await fetch(`http://www.omdbapi.com/?i=${movie.imdbID}&apikey=${OMDB_API_KEY}`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const detailedMovie = await response.json();
+      navigation.navigate('Reviews', { movie: detailedMovie });
+    } catch (error) {
+      console.error('Error fetching movie details:', error);
+    }
+  };
+
+
 
   useEffect(() => {
     const searchMovies = async () => {
@@ -68,10 +87,12 @@ export default function MoviesPage() {
         }}
       >
         {movies.map((movie, index) => (
-          <View key={index} style={styles.item}>
-            <Image source={{ uri: movie.Poster }} style={styles.poster} />
-            <Text style={styles.movieTitle}>{movie.Title}</Text>
-          </View>
+          <TouchableOpacity key={index} onPress={() => handleSelectMovie(movie)}>
+            <View style={styles.item}>
+              <Image source={{ uri: movie.Poster }} style={styles.poster} />
+              <Text style={styles.movieTitle}>{movie.Title}</Text>
+            </View>
+          </TouchableOpacity>
         ))}
       </ScrollView>
       <TouchableOpacity onPress={scrollRight} style={[styles.arrow, styles.arrowRight]}>

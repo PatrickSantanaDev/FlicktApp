@@ -7,6 +7,7 @@ import { NavigationContainer } from '@react-navigation/native'
  * These are where page routes are imported for the navigation system
  */
 import HomePage from './routes/HomePage.js';
+import ReviewsPage from './routes/ReviewsPage.js';
 import MoviesPage from './routes/MoviesPage.js';
 import FriendsPage from './routes/FriendsPage.js';
 import Profile from './routes/ProfilePage.js';
@@ -24,6 +25,7 @@ function MyStack() {
         <Stack.Navigator>
             <Stack.Screen name="Home" component={HomePage} />
             <Stack.Screen name="Movies" component={MoviesPage} />
+            <Stack.Screen name="Reviews" component={ReviewsPage} />
             <Stack.Screen name="Friends" component={FriendsPage} />
             <Stack.Screen name="Profile" component={Profile} />
         </Stack.Navigator>
