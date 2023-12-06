@@ -10,16 +10,16 @@ import Friend from '../components/Friend.js';
 var currentList;
 
 var emptyList = [];
-// var nameList = [
-//                 {key: "Onur",selected: false,label: "Onur", image: require('./assets/SmallRGBTest2.png')},
-//                 {key: "Samet",selected: false,label: "Samet",  image: require('./assets/SmallRGBTest2.png')},
-//                 {key: "Efe",selected: false,label: "Efe",  image: require('./assets/SmallRGBTest2.png')},
-//                 {key: "Bora",selected: false,label: "Bora",  image: require('./assets/SmallRGBTest2.png')},
-//                 {key: "Onur1",selected: false,label: "Onur", image: require('./assets/SmallRGBTest2.png')},
-//                 {key: "Samet1",selected: false,label: "Samet",  image: require('./assets/SmallRGBTest2.png')},
-//                 {key: "Efe1",selected: false,label: "Efe",  image: require('./assets/SmallRGBTest2.png')},
-//                 {key: "Bora1",selected: false,label: "Bora",  image: require('./assets/SmallRGBTest2.png')}
-//                 ]
+var nameList = [
+                {key: "Onur",selected: false,label: "Onur", image: require('../assets/SmallRGBTest2.png')},
+                {key: "Samet",selected: false,label: "Samet",  image: require('../assets/SmallRGBTest2.png')},
+                {key: "Efe",selected: false,label: "Efe",  image: require('../assets/SmallRGBTest2.png')},
+                {key: "Bora",selected: false,label: "Bora",  image: require('../assets/SmallRGBTest2.png')},
+                {key: "Onur1",selected: false,label: "Onur", image: require('../assets/SmallRGBTest2.png')},
+                {key: "Samet1",selected: false,label: "Samet",  image: require('../assets/SmallRGBTest2.png')},
+                {key: "Efe1",selected: false,label: "Efe",  image: require('../assets/SmallRGBTest2.png')},
+                {key: "Bora1",selected: false,label: "Bora",  image: require('../assets/SmallRGBTest2.png')}
+                ]
   
 
 

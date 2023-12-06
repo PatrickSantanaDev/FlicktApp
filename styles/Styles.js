@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
   },
   poster: {
     width: '100%',
-    height: windowHeight * 0.4,
+    height: windowHeight,
     resizeMode: 'contain',
   },
   movieTitle: {
@@ -43,6 +43,12 @@ const styles = StyleSheet.create({
   arrowRight: {
     right: 10,
   },
+  thumbs: {
+    position: 'absolute',
+    zIndex: 10,
+    flex: 1, 
+    flexDirection: 'column',
+  }
 });
 
 export default styles;

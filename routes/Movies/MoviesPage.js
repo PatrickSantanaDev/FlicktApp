@@ -1,20 +1,25 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Image, StyleSheet, Dimensions, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, Image, Dimensions, ScrollView, TouchableOpacity, Button } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import styles from '../styles/MovieStyles';
+import styles from '../../styles/MovieStyles';
 import { useNavigation } from '@react-navigation/native';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
-
 const OMDB_API_KEY = '942c9b75';
 
-export default function Home() {
+export function Home() {
+
+  console.log("Movies: ", movies);
+
   const [movies, setMovies] = useState([]);
   const scrollViewRef = useRef();
   const [currentIndex, setCurrentIndex] = useState(0);
   const navigation = useNavigation();
+
+  const [likedMovies, setLikedMovies] = useState([]);
+  const [dislikedMovies, setDislikedMovies] = useState([]);
 
   // Function to handle movie selection
   const handleSelectMovie = async (movie) => {
@@ -30,6 +35,19 @@ export default function Home() {
     }
   };
 
+  const addMovie = (movie) => {
+    setLikedMovies([...likedMovies, movie]);
+    scrollRight();
+  };
+
+  useEffect(() => {
+    console.log("Length: ", Object.keys(likedMovies).length);
+    console.log("Liked Movies", likedMovies);
+  }, [likedMovies]);
+
+  const removeMovie = (movie) => {
+    scrollRight();
+  };
 
 
   useEffect(() => {
@@ -87,18 +105,32 @@ export default function Home() {
         }}
       >
         {movies.map((movie, index) => (
-          <TouchableOpacity key={index} onPress={() => handleSelectMovie(movie)}>
-            <View style={styles.item}>
-              <Image source={{ uri: movie.Poster }} style={styles.poster} />
-              <Text style={styles.movieTitle}>{movie.Title}</Text>
+          <View key={index}>
+            <View style={{maxHeight: "10%"}}>
+              <TouchableOpacity onPress={() => handleSelectMovie(movie)}>
+                <View style={styles.item}>
+                  <Image source={{ uri: movie.Poster }} style={[styles.poster, {shadowColor: 'black', elevation: 5}]} />
+                  <Text style={styles.movieTitle}>{movie.Title}</Text>
+                  <View style={{flexDirection: 'row'}}>
+                    <TouchableOpacity onPress={() => removeMovie(movie)} style={{marginTop: 25, marginRight: 25}}>
+                      <Icon name='thumbs-down-outline' size={45} color="tomato" />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => addMovie(movie)} style={{marginTop: 25, marginLeft: 25}}>
+                      <Icon name='thumbs-up' size={45} color="lightgreen" />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </TouchableOpacity>
             </View>
-          </TouchableOpacity>
+          </View>
         ))}
       </ScrollView>
       <TouchableOpacity onPress={scrollRight} style={[styles.arrow, styles.arrowRight]}>
         <Icon name="chevron-forward" size={30} color="black" />
       </TouchableOpacity>
+      <Button title='View Movie List' onPress={() => navigation.navigate('Liked Movies', likedMovies )} />
     </View>
   );
 }
 
+export default Home;
