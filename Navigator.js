@@ -1,18 +1,75 @@
 import * as React from 'react';
 import { Button, View } from 'react-native';
+
 import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer } from '@react-navigation/native'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { NavigationContainer } from '@react-navigation/native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 /**
  * These are where page routes are imported for the navigation system
  */
 import HomePage from './routes/HomePage.js';
 import ReviewsPage from './routes/ReviewsPage.js';
-import MoviesPage from './routes/MoviesPage.js';
+import MoviesPage from './routes/Movies/MoviesPage.js';
+import LikedMovies from './routes/Movies/LikedMovies.js';
+
 import FriendsPage from './routes/FriendsPage.js';
 import ProfilePage from "./routes/ProfilePage.js";
 
 const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
+
+/**
+ * This element is created and used as the root component within the stack navigator to allow a tab bar to persist
+ * throughout a majority of the application.
+ * @returns tab navigation component
+ */
+function TabNavigator() {
+    const user ={ "name": 'John Doe',"username":'test',};
+    const LoadProfile = props => (
+        <ProfilePage user={user} />
+    );
+    return (
+        <Tab.Navigator
+            initialRouteName={MoviesPage}
+            /**
+             * This section handles the icons being displayed, selected, and highlighted
+             */
+            screenOptions={({ route }) => ({
+                headerShown: false,
+                tabBarIcon: ({ focused, color, size }) => {
+                    let iconName; 
+                    let rn = route.name;
+
+                    if (rn === "Movies") {
+                        iconName = focused ? 'tv' : 'tv-outline';
+                    } else if (rn === "Profile") {
+                        iconName = focused ? 'person' : 'person-outline';
+                    } else if (rn === "Friends") {
+                        iconName = focused ? 'people' : 'people-outline';
+                    }
+
+                    return <Ionicons name={iconName} size={size} color={color} />
+                },
+            } 
+            )}
+            
+            tabBarOptions={{
+                activeTintColor: 'tomato',
+                inactiveTintColor: 'grey',
+                labelStyle: { paddingBottom: 10, fontSize: 10 },
+                style: { padding: 10, height: 70 }
+            }}
+        >
+
+            <Tab.Screen name="Friends" component={FriendsPage} />
+            {/* <Tab.Screen name="Home" component={HomePage} /> */}
+            <Tab.Screen name="Movies" component={MoviesPage} />
+            <Tab.Screen name="Profile" component={LoadProfile} />
+        </Tab.Navigator>
+    );
+}
 
 /**
  * This is where the routes from the imported screns above are specified. The
@@ -20,18 +77,12 @@ const Stack = createStackNavigator();
  * Note that the top element is the default screen displayed by the component.
  * @returns Stack.Navigator component
  */
-function MyStack() {
-    const user ={ "name": 'John Doe',"username":'test',};
-    const LoadProfile = props => (
-        <ProfilePage user={user} />
-    );
+function StackNavigator() {
     return (
-        <Stack.Navigator>
-            <Stack.Screen name="Home" component={HomePage} />
-            <Stack.Screen name="Movies" component={MoviesPage} />
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Flickt" component={TabNavigator} />
             <Stack.Screen name="Reviews" component={ReviewsPage} />
-            <Stack.Screen name="Friends" component={FriendsPage} />
-            <Stack.Screen name="Profile" component={LoadProfile} />
+            <Stack.Screen name="Liked Movies" component={LikedMovies} />
         </Stack.Navigator>
     );
 }
@@ -44,7 +95,7 @@ function MyStack() {
 export default function App() {
     return (
         <NavigationContainer>
-            <MyStack />
+            <StackNavigator />
         </NavigationContainer>
     );
 }

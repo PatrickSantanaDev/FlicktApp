@@ -191,7 +191,7 @@ const ReviewsPage = ({ route, navigation }) => {
                             <View style={{ flexDirection: 'row' }}>
                                 {renderStars(review.userRating)}
                             </View>
-                            <Text style={styles.reviewText}>- (user here){review.user}</Text>
+                            <Text style={styles.reviewText}>{process.env.REACT_APP_USERNAME}{review.user}</Text>
                         </View>
                     ))}
                 </ScrollView>
