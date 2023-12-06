@@ -7,7 +7,7 @@ and the server stores in this way
 all you need to call the profile page is
 
 
-const user = {"username":(uername)};
+const user = {"username":(username)};
 
 //to display the profile page
 <ProfilePage user={user} />
@@ -32,8 +32,7 @@ example of what the php server gets
     }
 
 
-TODO:
- - Fix styling
+
 
  */
 import React, {useEffect, useState} from 'react';
@@ -55,8 +54,9 @@ const ProfilePage = ({ user }) => {
     const[interests, setInterests] = useState([]);
     const[rates,setRates]=useState([])
     const[viewed,setViewed] = useState([])
-    const[avatar,setAvatar] = useState('')
-    const[badge,setBadge] = useState('');
+    const[avatar,setAvatar] = useState('https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png')
+    const[badge,setBadge] = useState('https://www.pngall.com/wp-content/uploads/14/Loading-PNG-Photo.png');
+
 
 
     // Mock user data for demonstration
@@ -89,6 +89,7 @@ const ProfilePage = ({ user }) => {
                 setBadge(emptyBadge);
             }
         }
+
         const urladress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater'+ user.username +'}';
 
         loadList(urladress)
@@ -143,7 +144,8 @@ const ProfilePage = ({ user }) => {
         <View style={profileStyles.container}>
             {/*Name of User*/}
             
-            {/* <Text style={profileStyles.header}>{user.name}</Text> */}     
+            {/* <Text style={profileStyles.header}>{user.name}</Text> */}
+
             <Text style={profileStyles.header}></Text>
 
             <View style={profileStyles.userInfo}>

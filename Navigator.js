@@ -10,7 +10,7 @@ import HomePage from './routes/HomePage.js';
 import ReviewsPage from './routes/ReviewsPage.js';
 import MoviesPage from './routes/MoviesPage.js';
 import FriendsPage from './routes/FriendsPage.js';
-import Profile from './routes/ProfilePage.js';
+import ProfilePage from "./routes/ProfilePage.js";
 
 const Stack = createStackNavigator();
 
@@ -21,13 +21,17 @@ const Stack = createStackNavigator();
  * @returns Stack.Navigator component
  */
 function MyStack() {
+    const user ={ "name": 'John Doe',"username":'test',};
+    const LoadProfile = props => (
+        <ProfilePage user={user} />
+    );
     return (
         <Stack.Navigator>
             <Stack.Screen name="Home" component={HomePage} />
             <Stack.Screen name="Movies" component={MoviesPage} />
             <Stack.Screen name="Reviews" component={ReviewsPage} />
             <Stack.Screen name="Friends" component={FriendsPage} />
-            <Stack.Screen name="Profile" component={Profile} />
+            <Stack.Screen name="Profile" component={LoadProfile} />
         </Stack.Navigator>
     );
 }
