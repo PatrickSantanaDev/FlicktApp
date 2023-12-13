@@ -35,7 +35,7 @@ function TabNavigator() {
     );
     return (
         <Tab.Navigator
-            initialRouteName={MoviesPage}
+            initialRouteName="Movies"
             /**
              * This section handles the icons being displayed, selected, and highlighted
              */
