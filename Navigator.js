@@ -26,7 +26,7 @@ const Tab = createBottomTabNavigator();
  * @returns tab navigation component
  */
 function TabNavigator() {
-    const user ={ "name": 'John Doe',"username":'test',};
+    const user = { "name": 'John Doe', "username": 'test', };
     const LoadProfile = props => (
         <ProfilePage user={user} />
     );
@@ -36,15 +36,11 @@ function TabNavigator() {
     return (
         <Tab.Navigator
             initialRouteName="Movies"
-            /**
-             * This section handles the icons being displayed, selected, and highlighted
-             */
             screenOptions={({ route }) => ({
                 headerShown: false,
                 tabBarIcon: ({ focused, color, size }) => {
-                    let iconName; 
+                    let iconName;
                     let rn = route.name;
-
                     if (rn === "Movies") {
                         iconName = focused ? 'tv' : 'tv-outline';
                     } else if (rn === "Profile") {
@@ -52,18 +48,13 @@ function TabNavigator() {
                     } else if (rn === "Friends") {
                         iconName = focused ? 'people' : 'people-outline';
                     }
-
-                    return <Ionicons name={iconName} size={size} color={color} />
+                    return <Ionicons name={iconName} size={size} color={color} />;
                 },
-            } 
-            )}
-            
-            tabBarOptions={{
-                activeTintColor: 'tomato',
-                inactiveTintColor: 'grey',
-                labelStyle: { paddingBottom: 10, fontSize: 10 },
-                style: { padding: 10, height: 70 }
-            }}
+                tabBarActiveTintColor: 'tomato',
+                tabBarInactiveTintColor: 'grey',
+                tabBarLabelStyle: { paddingBottom: 10, fontSize: 10 },
+                tabBarStyle: { padding: 10, height: 70 }
+            })}
         >
 
             <Tab.Screen name="Friends" component={FriendsPageList} />

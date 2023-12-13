@@ -109,7 +109,7 @@ export function Home() {
             <View style={{maxHeight: "10%"}}>
               <TouchableOpacity onPress={() => handleSelectMovie(movie)}>
                 <View style={styles.item}>
-                  <Image source={{ uri: movie.Poster }} style={[styles.poster, {shadowColor: 'black', elevation: 5}]} />
+                  <Image source={{ uri: movie.Poster }} style={styles.poster} />
                   <Text style={styles.movieTitle}>{movie.Title}</Text>
                   <View style={{flexDirection: 'row'}}>
                     <TouchableOpacity onPress={() => removeMovie(movie)} style={{marginTop: 25, marginRight: 25}}>
