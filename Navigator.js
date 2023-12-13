@@ -30,6 +30,9 @@ function TabNavigator() {
     const LoadProfile = props => (
         <ProfilePage user={user} />
     );
+    const FriendsPageList = props => (
+        <FriendsPage user={user} />
+    );
     return (
         <Tab.Navigator
             initialRouteName={MoviesPage}
@@ -63,7 +66,7 @@ function TabNavigator() {
             }}
         >
 
-            <Tab.Screen name="Friends" component={FriendsPage} />
+            <Tab.Screen name="Friends" component={FriendsPageList} />
             {/* <Tab.Screen name="Home" component={HomePage} /> */}
             <Tab.Screen name="Movies" component={MoviesPage} />
             <Tab.Screen name="Profile" component={LoadProfile} />

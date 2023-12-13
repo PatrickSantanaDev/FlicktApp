@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     fontSize: 25,
     color: color1,
-    fontWeight: 900,
+    fontWeight: 'bold',
   },
 
   smallPhoto: {
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
       backgroundColor: color1,
       alignItems: "center",
       textAlign: 'center',
-      borderRadius: '5px',
+      borderRadius: 5,
   },
   smallPhotoButton: {
     opacity: 1,

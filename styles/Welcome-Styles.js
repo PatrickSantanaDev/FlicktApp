@@ -73,7 +73,7 @@ title: {
     padding: 5,
     color: "white",
     textAlign: 'center',
-    fontWeight: 500,
+    fontWeight: 'bold',
     
     
   },
@@ -92,7 +92,7 @@ title: {
     alignSelf: "center",
     fontSize: 25,
     color: color1,
-    fontWeight: 900,
+    fontWeight: 'bold',
     
     
   },

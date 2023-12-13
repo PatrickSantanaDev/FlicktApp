@@ -1,13 +1,10 @@
-import styles from '../styles/Styles.js';
+import styles from '../styles/FriendsStyles.js';
 import React, {useState} from 'react';
 import ImageButton from './ImageButton.js';
-import CustomButton from './Friends-CustomButton.js';
-import { Image, Pressable,TouchableOpacity, Button, FlatList, StyleSheet, Text, View, ListItem } from 'react-native';
+import {Text, View, VirtualizedList} from 'react-native';
 
 const Friend = (props) => {
-  const renderItem = ({ item ,index}) => {
-  //asource = {uri: props.friendList[index].image}
-  //console.log(props.photolist[index]);
+  const renderItem = ({ item }) => {
        return (
          <View  style={{
               flex: 1,
@@ -15,27 +12,25 @@ const Friend = (props) => {
               flexDirection: 'column',
               margin: 5
             }}>
-        <ImageButton image={item.image} label={item.label} click={seeFriendProfile}> </ImageButton>
+        <ImageButton image={item.image} label={item.username} click={seeFriendProfile}> </ImageButton>
          </View>
     );
  };
-
+ //WIP See detailed information about friend's profile 
  function seeFriendProfile() {
    console.log("Page navigated to friend's profile");
  }
  
- function showOptions() {
-   console.log("showing options");
- }
 
  var preview= <View style={styles.container} >
         <Text style={styles.header2}> Friends </Text> 
-        <CustomButton buttonStyle= {styles.homebutton} textStyle = {styles.homebuttonIcon} name = "." click= {showOptions}/>
-        <FlatList 
+        <VirtualizedList 
             horizontal={true}
             data={props.friendList}
             renderItem={renderItem}
-              keyExtractor={(item, index) => index}
+            getItemCount={() => props.friendList.length}
+            getItem={(data, index) => data[index]}
+              keyExtractor={(index) => index}
               />
         
         </View>
@@ -45,16 +40,4 @@ const Friend = (props) => {
 
 export default Friend;
 
-/*export default function Friend() {
-
-
-
-  function getFriendImage() {
-  return (
-    <View style={styles.container}>
-      <Image style={styles.logo} source={require('../assets/snack-icon.png')} />
-    </View>
-  );
-  }
-} */
 

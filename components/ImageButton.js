@@ -1,5 +1,5 @@
 import { Image, Pressable,StatusBar,TouchableOpacity, Button, FlatList, StyleSheet, Text, View, ListItem } from 'react-native';
-import styles from '../styles/Styles.js';
+import styles from '../styles/FriendsStyles.js';
 
 export default function imageButton(props) {
   return (
@@ -9,7 +9,7 @@ export default function imageButton(props) {
     style= {({pressed}) => {
       return pressed ? styles.pressed : styles.notpressed;
     }}>
-        <Image style={styles.smallPhoto} source={props.image} />
+        <Image source={{uri:props.image}} style={styles.smallPhoto} />
         <Text style= {styles.smallPhotoText} > {props.label} </Text>
     </Pressable>
     <StatusBar style="auto"/>
