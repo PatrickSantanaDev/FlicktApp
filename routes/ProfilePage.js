@@ -36,7 +36,7 @@ example of what the php server gets
 
  */
 import React, {useEffect, useState} from 'react';
-import {View, Text, Button, Image, VirtualizedList} from 'react-native';
+import {View, Text, Button, Image, VirtualizedList, TouchableOpacity} from 'react-native';
 import profileStyles from '../styles/Profile-styles.js'
 import gem1Badge from '../assets/badges/gem1.png';
 import gem2Badge from '../assets/badges/gem2.png';
@@ -44,6 +44,7 @@ import gem3Badge from '../assets/badges/gem3.png';
 import gem4Badge from '../assets/badges/gem4.png';
 import gem5Badge from '../assets/badges/gem5.png';
 import emptyBadge from '../assets/badges/empty.png';
+import { useNavigation } from '@react-navigation/native';
 
 
 const ProfilePage = ({ user }) => {
@@ -56,16 +57,16 @@ const ProfilePage = ({ user }) => {
     const[viewed,setViewed] = useState([])
     const[avatar,setAvatar] = useState('https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png')
     const[badge,setBadge] = useState('https://www.pngall.com/wp-content/uploads/14/Loading-PNG-Photo.png');
-
-
-
+    const navigation = useNavigation();
+    const OMDB_API_KEY = '942c9b75';
     // Mock user data for demonstration
     useEffect(() => {
         async function loadList(url) {
 
             const response = await fetch(url);
             const names = await response.json();
-            console.log(names)
+
+
 
             setMovies(names.recMovies);
             setFriends(names.friends);
@@ -91,12 +92,26 @@ const ProfilePage = ({ user }) => {
         }
 
         const urladress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater'+ user.username +'}';
+        loadList(urladress);
 
-        loadList(urladress)
 
 
 
     }, []);
+
+    const handleSelectMovie = async (movie) => {
+        try {
+            const response = await fetch(`http://www.omdbapi.com/?i=${movie.imdbID}&apikey=${OMDB_API_KEY}`);
+            if (response.ok) {
+                const detailedMovie = await response.json();
+                navigation.navigate('Reviews', { movie: detailedMovie });
+                return;
+            }
+            console.error("NETWORK ERROR FAILED TO LOAD DATA");
+        } catch (error) {
+            console.error("NETWORK ERROR FAILED TO LOAD DATA");
+        }
+    };
 
 
     const toggleStats = () => {
@@ -119,7 +134,9 @@ const ProfilePage = ({ user }) => {
     const renderMovie = ({ item }) => (
         <View>
             <View >
-                <Image source={{ uri: item.Poster }} style={profileStyles.poster} />
+                <TouchableOpacity onPress={() => handleSelectMovie(item)}>
+                    <Image source={{ uri: item.Poster }} style={profileStyles.poster} />
+                </TouchableOpacity>
             </View>
             <Text style={profileStyles.userInfo}>{item.Title}</Text>
         </View>
