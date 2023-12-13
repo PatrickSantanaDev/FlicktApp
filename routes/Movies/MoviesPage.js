@@ -36,7 +36,7 @@ export function Home() {
   };
 
   const addMovie = (movie) => {
-    setLikedMovies([...likedMovies, movie]);
+    setLikedMovies([...likedMovies, {key: movie.Title, poster: movie.Poster, selected: false}]);
     scrollRight();
   };
 
