@@ -156,6 +156,14 @@ const ProfilePage = ({ user }) => {
         </View>
 
     );
+    const renderBadgeImage = () => {
+        if (typeof badge === 'string' && badge.trim() !== '') {
+            return <Image source={{ uri: badge }} style={profileStyles.profileImage} />;
+        } else {
+            // Return a default or empty image when the badge URL is not valid
+            return <Image source={emptyBadge} style={profileStyles.profileImage} />;
+        }
+    };
 
     return (
         <View style={profileStyles.container}>
@@ -168,7 +176,7 @@ const ProfilePage = ({ user }) => {
             <View style={profileStyles.userInfo}>
                 <View style={profileStyles.avatarContainer}>
                     <Image source={{uri: avatar}} style={profileStyles.profileImage} />
-                    <Image source={badge} style={profileStyles.profileImage} />
+                    {renderBadgeImage()}
 
                 </View>
             </View>
