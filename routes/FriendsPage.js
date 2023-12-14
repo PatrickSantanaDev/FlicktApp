@@ -13,14 +13,17 @@ const VirtualListBasics = ({user}) => {
   //Get our user information to access their friends. 
 useEffect(() => {
         async function loadList(url) {
-           
-            const response = await fetch(url);
-            const names = await response.json();
-            setFriends(names.friends);
-            console.log(names.friends);
-            }
 
-            const urladress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater'+ user.username +'}';
+            const response = await fetch(url);
+            if (response.ok) {
+                const names = await response.json();
+
+                const foundUser = names.find(JSONuser => JSONuser.username === user.username);
+                if (foundUser)
+                    setFriends(foundUser.friends);
+            }
+        }
+            const urladress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater}';
 
         loadList(urladress)
 
