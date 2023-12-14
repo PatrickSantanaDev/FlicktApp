@@ -30,7 +30,16 @@ example of what the php server gets
         "rates":[{"key":1,"Title":"Deadpool","Rating":5,"Text":'Best Movie Ever'}],
         "viewed":[{"key":1,"Title":"Deadpool"}],
     }
-
+    {
+        "name": 'Onur Keles',
+        "username":'Onur',
+        "avatar": 'https://cdn-icons-png.flaticon.com/512/147/147142.png',
+        "interests": [{"key":1,"Type":'Action'}, {"key":2,"Type":'Thriller'}, {"key":3,"Type":'Comedy'}],
+        "friends": [{"key": "test","selected": false,"username": "test", "image": "https://cdn-icons-png.flaticon.com/512/147/147142.png"}],
+        "recMovies": [],
+        "rates":[],
+        "viewed":[],
+    }
 
 
 
@@ -45,7 +54,7 @@ import gem4Badge from '../assets/badges/gem4.png';
 import gem5Badge from '../assets/badges/gem5.png';
 import emptyBadge from '../assets/badges/empty.png';
 import { useNavigation } from '@react-navigation/native';
-//import {saveList} from "../components/SaveAndLoad";
+import {saveList} from "../components/SaveAndLoad";
 
 
 const ProfilePage = ({ user }) => {
@@ -64,16 +73,19 @@ const ProfilePage = ({ user }) => {
     // Mock user data for demonstration
     useEffect(() => {
         async function loadList(url) {
-
+            console.log(user.username)
             const response = await fetch(url);
             const names = await response.json();
+            console.log(names);
+            const userFound = names.find(userJSON => userJSON.username === user.username)
+            console.log(userFound.username)
 
-            setMovies(names.recMovies);
-            setFriends(names.friends);
-            setInterests(names.interests);
-            setRates(names.rates);
-            setAvatar(names.avatar);
-            setViewed(names.viewed);
+            setMovies(userFound.recMovies);
+            setFriends(userFound.friends);
+            setInterests(userFound.interests);
+            setRates(userFound.rates);
+            setAvatar(userFound.avatar);
+            setViewed(userFound.viewed);
             const total = movies.length + rates.length;
 
             if(total >= 10000){
@@ -91,9 +103,10 @@ const ProfilePage = ({ user }) => {
             }
         }
 
-        const urlAddress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater'+ user.username +'}';
+        const urlAddress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater}';
         loadList(urlAddress);
-        //const save = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/savejson.php?user={movierater'+ user.username +'}';
+        //const save = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/savejson.php?user={movierater}';
+        //console.log(save);
         //saveList(save,user);
 
 

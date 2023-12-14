@@ -10,9 +10,8 @@ const ReviewsPage = ({ route, navigation }) => {
     const [isSubmitted, setIsSubmitted] = useState(false);
     const movie = route.params.movie;
     const username = route.params.user.username;
-
     const handleDeleteAllReviews = async () => {
-        const deleteUrl = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/savejson.php?user={movierater'+ username +'}';
+        const deleteUrl = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/savejson.php?user={movierater}';
 
         try {
             const response = await fetch(deleteUrl, { method: 'POST' });
@@ -51,21 +50,28 @@ const ReviewsPage = ({ route, navigation }) => {
     useEffect(() => {
         const loadReviews = async () => {
             try {
-                const url = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater' + username + '}';
+                const url = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater}';
                 const response = await fetch(url);
                 const jsonResponse = await response.json();
-                 if (!jsonResponse || !jsonResponse.rates) {
-                    console.log('Response is empty or missing rates');
+
+                if (!jsonResponse || jsonResponse.length === 0) {
+                    console.log('Response is empty or does not contain data');
                     return;
                 }
 
-                const filteredReviews = jsonResponse.rates
-                    .filter(review => review.Title === movie.Title)
-                    .map(review => ({
-                        ...review,
-                        username: username// Embedding the username into each review object
-                    }));
-                setReviews(filteredReviews);
+                const allUsersReviews = [];
+                for (const user of jsonResponse) {
+                    const userReviews = user.rates.filter(review => review.Title === movie.Title)
+                        .map(review => ({
+                            ...review,
+                            username: user.username // Embedding the username into each review object
+                        }));
+
+                    allUsersReviews.push(...userReviews);
+                }
+
+                console.log(allUsersReviews);
+                setReviews(allUsersReviews);
             } catch (error) {
                 console.error('Error loading reviews:', error);
             }
@@ -73,6 +79,7 @@ const ReviewsPage = ({ route, navigation }) => {
 
         loadReviews();
     }, [movie.Title]);
+
 
 
     const renderStars = (rating) => {
@@ -95,63 +102,66 @@ const ReviewsPage = ({ route, navigation }) => {
             Title: movie.Title,
             Rating: userRating,
             Text: reviewText,
-
         };
 
-        const loadUrl = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater'+ username +'}';
-        const saveUrl = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/savejson.php?user={movierater'+ username +'}';
+        const loadUrl = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater}';
+        const saveUrl = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/savejson.php?user={movierater}';
 
         try {
             const loadResponse = await fetch(loadUrl);
 
-
             if (!loadResponse.ok) {
                 throw new Error('Network response was not ok');
             }
+
             const userProfile = await loadResponse.json();
-            if (!userProfile || !userProfile.rates) {
-                console.log('Response is empty or missing rates');
+
+            if (!userProfile) {
+                console.log('Response is empty');
                 return;
             }
 
-            const existingReviews = userProfile.rates.filter(review => review.Title === movie.Title);
-            let updatedReviews = existingReviews;
+            const existingUser = userProfile.find(userJSON => userJSON.username === username);
 
-            if (Array.isArray(existingReviews)) {
+            if (existingUser) {
+                const updatedReviews = existingUser.rates || []; // Initialize as empty array if 'rates' doesn't exist
                 updatedReviews.push(newReviewData);
-            } else {
-                updatedReviews = [existingReviews, newReviewData];
-            }
-            userProfile.rates = updatedReviews;
-            const requestOptions = {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(userProfile), // convert to JSON string
-            };
-            const saveResponse = await fetch(saveUrl, requestOptions);
-            if (!saveResponse.ok) {
-                throw new Error('Failed to save review data');
-            }
-            const newReviewDataWithUseranme = {
-                Title: movie.Title,
-                Rating: userRating,
-                Text: reviewText,
-                username: username
+                existingUser.rates = updatedReviews;
 
-            };
-            // update the local state with the new review
-            setReviews(prevReviews => [...prevReviews, newReviewDataWithUseranme]);
+                // Deep clone the userProfile before sending it
+                const updatedProfile = JSON.parse(JSON.stringify(userProfile));
 
-            if (saveResponse && saveResponse.ok) {
-                // reset the reviewText and userRating
+                const requestOptions = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updatedProfile), // Send the modified copy
+                };
+
+                const saveResponse = await fetch(saveUrl, requestOptions);
+
+                if (!saveResponse.ok) {
+                    throw new Error('Failed to save review data');
+                }
+
+                // Update local state with the new review
+                const newReviewDataWithUsername = {
+                    ...newReviewData,
+                    username: username,
+                };
+                setReviews(prevReviews => [...prevReviews, newReviewDataWithUsername]);
+
+                // Reset inputs and set submission state
                 setReviewText('');
                 setUserRating(0);
                 setIsSubmitted(true);
 
                 setTimeout(() => setIsSubmitted(false), 3000);
-            }
 
-            console.log("Review data successfully updated on server");
+                console.log("Review data successfully updated on server");
+            } else {
+                console.log('User not found');
+                return;
+            }
         } catch (error) {
             console.error('Error processing review data:', error);
             setIsSubmitted(false);
