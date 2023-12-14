@@ -9,9 +9,10 @@ const windowHeight = Dimensions.get('window').height;
 
 const OMDB_API_KEY = '942c9b75';
 
-export function Home() {
+export function Home( {user} ) {
 
   console.log("Movies: ", movies);
+
 
   const [movies, setMovies] = useState([]);
   const scrollViewRef = useRef();
@@ -29,7 +30,7 @@ export function Home() {
         throw new Error('Network response was not ok');
       }
       const detailedMovie = await response.json();
-      navigation.navigate('Reviews', { movie: detailedMovie });
+      navigation.navigate('Reviews', { movie: detailedMovie, user: user });
     } catch (error) {
       console.error('Error fetching movie details:', error);
     }

@@ -45,6 +45,7 @@ import gem4Badge from '../assets/badges/gem4.png';
 import gem5Badge from '../assets/badges/gem5.png';
 import emptyBadge from '../assets/badges/empty.png';
 import { useNavigation } from '@react-navigation/native';
+//import {saveList} from "../components/SaveAndLoad";
 
 
 const ProfilePage = ({ user }) => {
@@ -59,14 +60,13 @@ const ProfilePage = ({ user }) => {
     const[badge,setBadge] = useState('https://www.pngall.com/wp-content/uploads/14/Loading-PNG-Photo.png');
     const navigation = useNavigation();
     const OMDB_API_KEY = '942c9b75';
+
     // Mock user data for demonstration
     useEffect(() => {
         async function loadList(url) {
 
             const response = await fetch(url);
             const names = await response.json();
-
-
 
             setMovies(names.recMovies);
             setFriends(names.friends);
@@ -91,9 +91,10 @@ const ProfilePage = ({ user }) => {
             }
         }
 
-        const urladress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater'+ user.username +'}';
-        loadList(urladress);
-
+        const urlAddress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater'+ user.username +'}';
+        loadList(urlAddress);
+        //const save = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/savejson.php?user={movierater'+ user.username +'}';
+        //saveList(save,user);
 
 
 
@@ -104,7 +105,7 @@ const ProfilePage = ({ user }) => {
             const response = await fetch(`http://www.omdbapi.com/?i=${movie.imdbID}&apikey=${OMDB_API_KEY}`);
             if (response.ok) {
                 const detailedMovie = await response.json();
-                navigation.navigate('Reviews', { movie: detailedMovie });
+                navigation.navigate('Reviews', { movie: detailedMovie, user:user });
                 return;
             }
             console.error("NETWORK ERROR FAILED TO LOAD DATA");
@@ -177,7 +178,6 @@ const ProfilePage = ({ user }) => {
                 <View style={profileStyles.avatarContainer}>
                     <Image source={{uri: avatar}} style={profileStyles.profileImage} />
                     {renderBadgeImage()}
-
                 </View>
             </View>
             <View style={profileStyles.userInfo}>

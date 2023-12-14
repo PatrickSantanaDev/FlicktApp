@@ -26,10 +26,13 @@ const Tab = createBottomTabNavigator();
  * @returns tab navigation component
  */
 function TabNavigator() {
-    const user = { "name": 'John Doe', "username": 'test', };
+    const user = {username:"test"};
     const LoadProfile = props => (
         <ProfilePage user={user} />
     );
+    const LoadMoviePage = props =>(
+        <MoviesPage user={user} />
+     );
     const FriendsPageList = props => (
         <FriendsPage user={user} />
     );
@@ -59,7 +62,7 @@ function TabNavigator() {
 
             <Tab.Screen name="Friends" component={FriendsPageList} />
             {/* <Tab.Screen name="Home" component={HomePage} /> */}
-            <Tab.Screen name="Movies" component={MoviesPage} />
+            <Tab.Screen name="Movies" component={LoadMoviePage} />
             <Tab.Screen name="Profile" component={LoadProfile} />
         </Tab.Navigator>
     );

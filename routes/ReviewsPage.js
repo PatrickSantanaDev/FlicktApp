@@ -8,10 +8,11 @@ const ReviewsPage = ({ route, navigation }) => {
     const [userRating, setUserRating] = useState(0);
     const [reviews, setReviews] = useState([]);
     const [isSubmitted, setIsSubmitted] = useState(false);
-    const movie = route.params.movie; 
+    const movie = route.params.movie;
+    const username = route.params.user.username;
 
     const handleDeleteAllReviews = async () => {
-        const deleteUrl = "https://cs.boisestate.edu/~scutchin/cs402/codesnips/savejson.php?user=patricksantana";
+        const deleteUrl = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/savejson.php?user={movierater'+ username +'}';
 
         try {
             const response = await fetch(deleteUrl, { method: 'POST' });
@@ -49,32 +50,27 @@ const ReviewsPage = ({ route, navigation }) => {
 
     useEffect(() => {
         const loadReviews = async () => {
-            const url = "https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user=patricksantana";
             try {
+                const url = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater' + username + '}';
                 const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-
-                const text = await response.text(); // get response as text
-                if (!text) {
-                    console.log('Response is empty');
+                const jsonResponse = await response.json();
+                 if (!jsonResponse || !jsonResponse.rates) {
+                    console.log('Response is empty or missing rates');
                     return;
                 }
 
-                const responseData = JSON.parse(text); // parse text as JSON
-                if (!Array.isArray(responseData)) {
-                    console.error('Unexpected data format:', responseData);
-                    return;
-                }
-
-                // filter reviews based on the movie title
-                const filteredReviews = responseData.filter(review => review.movieTitle === movie.Title);
+                const filteredReviews = jsonResponse.rates
+                    .filter(review => review.Title === movie.Title)
+                    .map(review => ({
+                        ...review,
+                        username: username// Embedding the username into each review object
+                    }));
                 setReviews(filteredReviews);
             } catch (error) {
                 console.error('Error loading reviews:', error);
             }
         };
+
         loadReviews();
     }, [movie.Title]);
 
@@ -96,29 +92,29 @@ const ReviewsPage = ({ route, navigation }) => {
 
     const handleSubmit = async () => {
         const newReviewData = {
-            movieTitle: movie.Title,
-            userRating: userRating,
-            reviewText: reviewText,
+            Title: movie.Title,
+            Rating: userRating,
+            Text: reviewText,
+
         };
 
-        const loadUrl = "https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user=patricksantana";
-        const saveUrl = "https://cs.boisestate.edu/~scutchin/cs402/codesnips/savejson.php?user=patricksantana";
+        const loadUrl = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater'+ username +'}';
+        const saveUrl = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/savejson.php?user={movierater'+ username +'}';
 
         try {
             const loadResponse = await fetch(loadUrl);
-            let existingReviews = [];
 
-            if (loadResponse.ok) {
-                const text = await loadResponse.text(); // get response as text
-                if (text) {
-                    try {
-                        existingReviews = JSON.parse(text); // parse text as JSON
-                    } catch (parseError) {
-                        console.error('Error parsing JSON:', parseError);
-                    }
-                }
+
+            if (!loadResponse.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const userProfile = await loadResponse.json();
+            if (!userProfile || !userProfile.rates) {
+                console.log('Response is empty or missing rates');
+                return;
             }
 
+            const existingReviews = userProfile.rates.filter(review => review.Title === movie.Title);
             let updatedReviews = existingReviews;
 
             if (Array.isArray(existingReviews)) {
@@ -126,19 +122,25 @@ const ReviewsPage = ({ route, navigation }) => {
             } else {
                 updatedReviews = [existingReviews, newReviewData];
             }
-
+            userProfile.rates = updatedReviews;
             const requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(updatedReviews), // convert to JSON string
+                body: JSON.stringify(userProfile), // convert to JSON string
             };
             const saveResponse = await fetch(saveUrl, requestOptions);
             if (!saveResponse.ok) {
                 throw new Error('Failed to save review data');
             }
+            const newReviewDataWithUseranme = {
+                Title: movie.Title,
+                Rating: userRating,
+                Text: reviewText,
+                username: username
 
+            };
             // update the local state with the new review
-            setReviews(prevReviews => [...prevReviews, newReviewData]);
+            setReviews(prevReviews => [...prevReviews, newReviewDataWithUseranme]);
 
             if (saveResponse && saveResponse.ok) {
                 // reset the reviewText and userRating
@@ -187,11 +189,11 @@ const ReviewsPage = ({ route, navigation }) => {
                 <ScrollView nestedScrollEnabled={true}>
                     {reviews.map((review, index) => (
                         <View key={index} style={styles.reviewItem}>
-                            <Text style={styles.reviewText}>"{review.reviewText}"</Text>
+                            <Text style={styles.reviewText}>"{review.Text}"</Text>
                             <View style={{ flexDirection: 'row' }}>
-                                {renderStars(review.userRating)}
+                                {renderStars(review.Rating)}
                             </View>
-                            <Text style={styles.reviewText}>- (user here){review.user}</Text>
+                            <Text style={styles.reviewText}>- {review.username}</Text>
                         </View>
                     ))}
                 </ScrollView>
