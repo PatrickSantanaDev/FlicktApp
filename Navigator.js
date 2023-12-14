@@ -26,7 +26,7 @@ const Tab = createBottomTabNavigator();
  * @returns tab navigation component
  */
 function TabNavigator() {
-    const user = {"username":'test'};
+    const user = {"username":'Elijah'};
     const LoadProfile = props => (
         <ProfilePage user={user} />
     );
