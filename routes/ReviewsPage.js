@@ -128,36 +128,38 @@ const ReviewsPage = ({ route, navigation }) => {
             if (existingUserIndex !== -1) {
                 const existingUser = userProfile[existingUserIndex];
                 const updatedRec = existingUser.recMovies || [];
-
                 const movieExistsIndex = updatedRec.findIndex(movie => movie.Title === movie.Title);
 
                 if (movieExistsIndex !== -1) {
                     // Remove the movie from recMovies if it exists
                     updatedRec.splice(movieExistsIndex, 1);
                     setIsRec(false);
-
-                    existingUser.recMovies = updatedRec;
-
-                    const uniqueMovies = Array.from(new Map(updatedRec.map(movie => [movie.imdbID, movie])).values());
-                    const updatedProfile = JSON.parse(JSON.stringify(userProfile));
-
-                    const requestOptions = {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(updatedProfile), // Send the modified copy
-                    };
-
-                    const saveResponse = await fetch(saveUrl, requestOptions);
-
-                    if (!saveResponse.ok) {
-                        throw new Error('Failed to save review data');
-                    }
-
-                    console.log("Recommended data successfully updated on server");
+                    console.log('Movie removed from recMovies');
                 } else {
-                    console.log('Movie not found in recommended list');
+                    // Add the movie to recMovies if it doesn't exist
+                    updatedRec.push(movie);
                     setIsRec(true);
+                    console.log('Movie added to recMovies');
                 }
+
+                existingUser.recMovies = updatedRec;
+
+                const uniqueMovies = Array.from(new Map(updatedRec.map(movie => [movie.imdbID, movie])).values());
+                const updatedProfile = JSON.parse(JSON.stringify(userProfile));
+
+                const requestOptions = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updatedProfile), // Send the modified copy
+                };
+
+                const saveResponse = await fetch(saveUrl, requestOptions);
+
+                if (!saveResponse.ok) {
+                    throw new Error('Failed to save review data');
+                }
+
+                console.log("Recommended data successfully updated on server");
             } else {
                 console.log('User not found');
                 return;
@@ -167,6 +169,7 @@ const ReviewsPage = ({ route, navigation }) => {
             setIsRec(false);
         }
     };
+
 
     const handleSubmit = async () => {
         const newReviewData = {
