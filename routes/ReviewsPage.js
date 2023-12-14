@@ -31,12 +31,16 @@ const ReviewsPage = ({ route, navigation }) => {
     // Calculate the average user rating based on existing reviews
     const calculateAverageRating = () => {
         if (reviews.length === 0) {
-            return 0; //no reviews, return 0
+            return 0; // No reviews, return 0
         }
-
-        const totalRating = reviews.reduce((sum, review) => sum + review.userRating, 0);
+    
+        // Sum all the ratings for the specific movie
+        const totalRating = reviews.reduce((sum, review) => sum + review.Rating, 0);
+    
+        // Divide the total rating by the number of reviews to get the average
         return totalRating / reviews.length;
     };
+    
 
     // Render stars based on the average user rating
     const renderAverageRatingStars = () => {
