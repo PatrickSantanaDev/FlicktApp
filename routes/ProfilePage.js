@@ -54,7 +54,7 @@ import gem4Badge from '../assets/badges/gem4.png';
 import gem5Badge from '../assets/badges/gem5.png';
 import emptyBadge from '../assets/badges/empty.png';
 import { useNavigation } from '@react-navigation/native';
-import {saveList} from "../components/SaveAndLoad";
+//import {saveList} from "../components/SaveAndLoad";
 
 
 const ProfilePage = ({ user }) => {
@@ -67,6 +67,7 @@ const ProfilePage = ({ user }) => {
     const[viewed,setViewed] = useState([])
     const[avatar,setAvatar] = useState('https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png')
     const[badge,setBadge] = useState('https://www.pngall.com/wp-content/uploads/14/Loading-PNG-Photo.png');
+
     const navigation = useNavigation();
     const OMDB_API_KEY = '942c9b75';
 
@@ -183,7 +184,7 @@ const ProfilePage = ({ user }) => {
         <View style={profileStyles.container}>
             {/*Name of User*/}
             
-            {/* <Text style={profileStyles.header}>{user.name}</Text> */}
+             <Text style={profileStyles.header}>{user.username}</Text>
 
             <Text style={profileStyles.header}></Text>
 
