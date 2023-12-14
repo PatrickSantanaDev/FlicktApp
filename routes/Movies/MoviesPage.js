@@ -3,6 +3,7 @@ import { View, Text, Image, Dimensions, ScrollView, TouchableOpacity, Button } f
 import Icon from 'react-native-vector-icons/Ionicons';
 import styles from '../../styles/MovieStyles';
 import { useNavigation } from '@react-navigation/native';
+import {saveList} from "../../components/SaveAndLoad";
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -74,19 +75,48 @@ export function Home( {user} ) {
       }
     };
 
-    searchMovies();
-  }, []);
+    searchMovies()
 
+  }, []);
+  useEffect(() => {
+    if (movies.length > 0) {
+      addViewed(movies[0]);
+
+    }
+  }, []);
   const scrollLeft = () => {
     const newIndex = Math.max(currentIndex - 1, 0);
     scrollViewRef.current.scrollTo({ x: newIndex * windowWidth, animated: true });
     setCurrentIndex(newIndex);
   };
+  async function addViewed(movie) {
+    const load = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater}';
+    const save = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/savejson.php?user={movierater}';
+
+    try {
+      const response = await fetch(load);
+      const data = await response.json();
+
+      const foundUser = data.find(JSONuser => JSONuser.username === user.username);
+      if (foundUser) {
+        const movieExists = foundUser.viewed.find(movieJson => movieJson.Title === movie.Title);
+        if (!movieExists) {
+          foundUser.viewed.push(movie);
+        }
+      }
+
+      saveList(save, data);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
 
   const scrollRight = () => {
+
     const newIndex = Math.min(currentIndex + 1, movies.length - 1);
     scrollViewRef.current.scrollTo({ x: newIndex * windowWidth, animated: true });
     setCurrentIndex(newIndex);
+    addViewed(movies[currentIndex]);
   };
 
   return (
