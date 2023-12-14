@@ -105,8 +105,8 @@ const ProfilePage = ({ user }) => {
 
         const urlAddress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater}';
         loadList(urlAddress);
-        //const save = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/savejson.php?user={movierater}';
-        //console.log(save);
+        const save = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/savejson.php?user={movierater}';
+        console.log(save);
         //saveList(save,user);
 
 
@@ -152,7 +152,7 @@ const ProfilePage = ({ user }) => {
                     <Image source={{ uri: item.Poster }} style={profileStyles.poster} />
                 </TouchableOpacity>
             </View>
-            <Text style={profileStyles.userInfo}>{item.Title}</Text>
+
         </View>
 
     );

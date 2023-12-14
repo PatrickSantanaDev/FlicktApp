@@ -8,6 +8,7 @@ const ReviewsPage = ({ route, navigation }) => {
     const [userRating, setUserRating] = useState(0);
     const [reviews, setReviews] = useState([]);
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const[isRec,setIsRec] = useState(false);
     const movie = route.params.movie;
     const username = route.params.user.username;
     const handleDeleteAllReviews = async () => {
@@ -58,6 +59,14 @@ const ReviewsPage = ({ route, navigation }) => {
                     console.log('Response is empty or does not contain data');
                     return;
                 }
+                const user = jsonResponse.find(userJSON => userJSON.username === username);
+                if(user){
+
+                    if(user.recMovies.find(movieJSON => movieJSON.Title === movie.Title))
+                        setIsRec(true);
+                }
+
+
 
                 const allUsersReviews = [];
                 for (const user of jsonResponse) {
@@ -95,6 +104,68 @@ const ReviewsPage = ({ route, navigation }) => {
                 <Icon name={i < userRating ? 'star' : 'star-o'} size={30} color={i < userRating ? "#FFD700" : "#000"} style={styles.starIcon} />
             </TouchableOpacity>
         ));
+    };
+    const handleRec = async () => {
+        const loadUrl = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater}';
+        const saveUrl = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/savejson.php?user={movierater}';
+
+        try {
+            const loadResponse = await fetch(loadUrl);
+
+            if (!loadResponse.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const userProfile = await loadResponse.json();
+
+            if (!userProfile) {
+                console.log('Response is empty');
+                return;
+            }
+
+            const existingUserIndex = userProfile.findIndex(userJSON => userJSON.username === username);
+
+            if (existingUserIndex !== -1) {
+                const existingUser = userProfile[existingUserIndex];
+                const updatedRec = existingUser.recMovies || [];
+
+                const movieExistsIndex = updatedRec.findIndex(movie => movie.Title === movie.Title);
+
+                if (movieExistsIndex !== -1) {
+                    // Remove the movie from recMovies if it exists
+                    updatedRec.splice(movieExistsIndex, 1);
+                    setIsRec(false);
+
+                    existingUser.recMovies = updatedRec;
+
+                    const uniqueMovies = Array.from(new Map(updatedRec.map(movie => [movie.imdbID, movie])).values());
+                    const updatedProfile = JSON.parse(JSON.stringify(userProfile));
+
+                    const requestOptions = {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(updatedProfile), // Send the modified copy
+                    };
+
+                    const saveResponse = await fetch(saveUrl, requestOptions);
+
+                    if (!saveResponse.ok) {
+                        throw new Error('Failed to save review data');
+                    }
+
+                    console.log("Recommended data successfully updated on server");
+                } else {
+                    console.log('Movie not found in recommended list');
+                    setIsRec(true);
+                }
+            } else {
+                console.log('User not found');
+                return;
+            }
+        } catch (error) {
+            console.error('Error processing recommended data:', error);
+            setIsRec(false);
+        }
     };
 
     const handleSubmit = async () => {
@@ -226,6 +297,13 @@ const ReviewsPage = ({ route, navigation }) => {
                         {isSubmitted ? "Success!" : "Submit"}
                     </Text>
                 </TouchableOpacity>
+                <Text/>
+                <TouchableOpacity style={styles.submitButton} onPress={handleRec}>
+                <Text style={styles.submitButtonText}>
+                    {isRec ? "Delete Recommendation" : "Add Recommendation"}
+                </Text>
+
+            </TouchableOpacity>
                 {/* <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteAllReviews}>
                     <Text style={styles.deleteButtonText}>Delete All Reviews</Text>
                 </TouchableOpacity> */}
