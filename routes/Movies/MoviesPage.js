@@ -105,7 +105,7 @@ export function Home( {user} ) {
         }
       }
 
-      saveList(save, data);
+      await saveList(save, data);
     } catch (error) {
       console.error('Error:', error);
     }
