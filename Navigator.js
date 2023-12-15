@@ -25,10 +25,10 @@ const Tab = createBottomTabNavigator();
  * throughout a majority of the application.
  * @returns tab navigation component
  */
-
+const defaultUser = {username:'Elijah'};
 function TabNavigator() {
     //const user = [{"name":"Elijah Meldrim","username":"Elijah","avatar":"https://cdn-icons-png.flaticon.com/512/147/147142.png","interests":[{"key":1,"Type":"Action"},{"key":2,"Type":"Comedy"},{"key":3,"Type":"Drama"}],"friends":[],"recMovies":[],"rates":[],"viewed":[]},{"name":"Onur Keles","username":"Onur","avatar":"https://cdn-icons-png.flaticon.com/512/147/147142.png","interests":[{"key":1,"Type":"Action"}, {"key":2,"Type":"Thriller"}, {"key":3,"Type":"Comedy"}],"friends":[],"recMovies":[],"rates":[],"viewed":[]}, {"name":"Patrick Santana","username":"Patrick","avatar":"https://cdn-icons-png.flaticon.com/512/147/147144.png","interests":[{"key":1,"Type":"Action"},{ "key":2,"Type":"Thriller"},{"key":3,"Type":"Comedy"}],"friends":[],"recMovies":[],"rates":[],"viewed":[]}, {"name":"Gunnar Vittrup","username":"Gunnar","avatar":"https://cdn-icons-png.flaticon.com/512/147/147133.png","interests":[{"key":1,"Type":"Action"}, {"key":2,"Type":"Thriller"}, {"key":3,"Type":"Comedy"}],"friends":[{"key":"test","selected":false,"username":"test","image":"https://cdn-icons-png.flaticon.com/512/147/147142.png"}],"recMovies":[],"rates":[],"viewed":[]}];
-    const defaultUser = {username:'Onur'};
+
 
     const ProfileScreen = ({ navigation, route }) => {
 
@@ -105,12 +105,13 @@ function StackNavigator() {
 class LoadProfile extends React.Component {
 
     render() {
+
         console.log("in LOAD PROFILE -" );
         console.log(this.props.route.params.user);
         const  user  = this.props.route.params.user;
         console.log("User -" );
         console.log(user );
-        return <ProfilePage user={user} />;
+        return <ProfilePage user={user} TopUser = {defaultUser} />;
     }
 }
 /**

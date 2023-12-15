@@ -58,7 +58,7 @@ import {saveList} from "../components/SaveAndLoad";
 //import {saveList} from "../components/SaveAndLoad";
 
 
-const ProfilePage = ({ user  }) => {
+const ProfilePage = ({ user ,TopUser }) => {
 
     const [showStats, setShowStats] = useState(false);
     const [movies, setMovies] = useState([]);
@@ -129,7 +129,7 @@ const ProfilePage = ({ user  }) => {
             const response = await fetch(`http://www.omdbapi.com/?i=${movie.imdbID}&apikey=${OMDB_API_KEY}`);
             if (response.ok) {
                 const detailedMovie = await response.json();
-                navigation.push('Reviews', { movie: detailedMovie, user: user });
+                navigation.push('Reviews', { movie: detailedMovie, user: TopUser });
                 return;
             }
             console.error("NETWORK ERROR FAILED TO LOAD DATA");
