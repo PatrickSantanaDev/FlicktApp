@@ -315,7 +315,7 @@ const ReviewsPage = ({ route, navigation }) => {
                 <Text />
                 <TouchableOpacity style={styles.submitButton} onPress={handleRec}>
                     <Text style={styles.submitButtonText}>
-                        {isRec ? "Delete Recommendation" : "Add Recommendation"}
+                        {isRec ? "Delete Recommendation" : "Add to Recommended Movies"}
                     </Text>
 
                 </TouchableOpacity>
