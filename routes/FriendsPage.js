@@ -4,6 +4,7 @@ import {Alert, Button, TextInput, View} from 'react-native';
 import styles from '../styles/FriendsStyles.js'
 import Friend from '../components/Friend.js';
 import {saveList} from "../components/SaveAndLoad";
+import {useFocusEffect} from "@react-navigation/native";
 
 const VirtualListBasics = ({user}) => {
   const[friends,setFriends]= useState([]);
@@ -38,7 +39,12 @@ const [aUser,setaUser] = useState({});
     loadList(urladress)
 
 }, []);
-
+    useFocusEffect(
+        React.useCallback(() => {
+            const urlAddress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater}';
+            loadList(urlAddress);
+        }, [user.username])
+    );
 
 
 

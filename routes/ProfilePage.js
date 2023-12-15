@@ -55,11 +55,12 @@ import gem5Badge from '../assets/badges/gem5.png';
 import emptyBadge from '../assets/badges/empty.png';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import ImageButton from "../components/ImageButton";
+import {saveList} from "../components/SaveAndLoad";
 
 
 
 const ProfilePage = ({ user ,TopUser }) => {
-
+    const [isTopUser, setIsTopUser] = useState(false);
     const [showStats, setShowStats] = useState(false);
     const [movies, setMovies] = useState([]);
     const[friends,setFriends]= useState([]);
@@ -97,8 +98,11 @@ const ProfilePage = ({ user ,TopUser }) => {
 
     // Mock user data for demonstration
     useEffect(() => {
+        if(user === TopUser)
+        {
+            setIsTopUser(true);
+        }
 
-        console.log(user)
         const urlAddress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater}';
         loadList(urlAddress);
         //const save = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/savejson.php?user={movierater}';
@@ -140,6 +144,17 @@ const ProfilePage = ({ user ,TopUser }) => {
 
     const toggleStats = () => {
         setShowStats(!showStats);
+    };
+    const renderRemove = () => {
+        if (user !== TopUser) {
+            return (
+                <Button
+                    title={'Remove Friend'}
+                    onPress={() => removeFriend()}
+                />
+            );
+        }
+        return null;
     };
 
     const renderStats = () => {
@@ -208,6 +223,50 @@ const ProfilePage = ({ user ,TopUser }) => {
             console.error(error);
         }
     }
+    const removeFriend = async () => {
+
+        const url = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater}';
+        const save = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/savejson.php?user={movierater}';
+        try {
+            const response = await fetch(url);
+
+            if (response.ok) {
+                const names = await response.json();
+
+                const foundUser = names.find(JSONuser => JSONuser.username === TopUser.username);
+
+                if (foundUser) {
+
+                    const friendName = user.username;
+
+                    if (friendName) {
+                        const foundFriend = names.find(JSONuser => JSONuser.username === friendName);
+                        if (foundFriend && foundUser.friends.find(JSONuser => JSONuser.username === friendName) && foundFriend !== foundUser) {
+                            const userIndex = foundUser.friends.findIndex(JSONuser => JSONuser.username ===friendName );
+                            const friendIndex = names.find(JSONuser => JSONuser.username === TopUser.username);
+                            const friendFreind = foundFriend.friends.splice(friendIndex, 1);
+                            const userFreind = foundUser.friends.splice(userIndex, 1);
+                            await saveList(save, names);
+                            await loadList(url);
+                            loadList(url);
+                            console.log('Friend added successfully!');
+                        } else {
+                            console.log('Friend not found in the list or already exists in friends!');
+                        }
+                    } else {
+                        console.log('Invalid friend name!');
+                    }
+                } else {
+                    console.log('User not found!');
+                }
+            } else {
+                console.log('Failed to fetch data!');
+            }
+        } catch (error) {
+            console.error('Error occurred:', error);
+            // Handle the error or add appropriate error handling logic here
+        }
+    }
 
     return (
         <View style={profileStyles.container}>
@@ -231,6 +290,8 @@ const ProfilePage = ({ user ,TopUser }) => {
                         onPress={toggleStats}
                     />
                     {renderStats()}
+
+                    {renderRemove()}
                 </View>
             </View>
 
