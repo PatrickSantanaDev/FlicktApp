@@ -79,6 +79,8 @@ const ReviewsPage = ({ route, navigation }) => {
                         friendReviews.push(...userReviews);
                     }
                 }
+                if(currentUser.recMovies.find(review => review.Title === movie.Title))
+                    setIsRec(true);
 
                 console.log(friendReviews);
                 setReviews(friendReviews);

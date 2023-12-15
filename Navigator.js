@@ -77,7 +77,7 @@ function TabNavigator() {
                     tabPress: (e) => {
                         // Pass the user object when navigating to the ProfileScreen
                         e.preventDefault(); // Prevent the default action
-                        navigation.navigate('Profile', { user: defaultUser });
+                        navigation.navigate('Profile', { user: defaultUser, TopUser: defaultUser });
                     },
                 })}
                 component={ProfileScreen}
