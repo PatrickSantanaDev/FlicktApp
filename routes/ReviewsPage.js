@@ -129,7 +129,7 @@ const ReviewsPage = ({ route, navigation }) => {
             if (existingUserIndex !== -1) {
                 const existingUser = userProfile[existingUserIndex];
                 const updatedRec = existingUser.recMovies || [];
-                const movieExistsIndex = updatedRec.findIndex(movie => movie.Title === movie.Title);
+                const movieExistsIndex = updatedRec.findIndex(movieJSON => movieJSON.Title === movie.Title);
 
                 if (movieExistsIndex !== -1) {
                     // Remove the movie from recMovies if it exists
