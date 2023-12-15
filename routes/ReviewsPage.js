@@ -60,38 +60,35 @@ const ReviewsPage = ({ route, navigation }) => {
                 const jsonResponse = await response.json();
 
                 if (!jsonResponse || jsonResponse.length === 0) {
-                    console.log('Response is empty or does not contain data');
+                    console.log('Response is empty/no data');
                     return;
                 }
-                const user = jsonResponse.find(userJSON => userJSON.username === username);
-                if(user){
 
-                    if(user.recMovies.find(movieJSON => movieJSON.Title === movie.Title))
-                        setIsRec(true);
-                }
+                // Find current user and their friends
+                const currentUser = jsonResponse.find(userJSON => userJSON.username === username);
+                const friendsUsernames = currentUser ? currentUser.friends.map(friend => friend.username) : [];
 
-
-
-                const allUsersReviews = [];
+                const friendReviews = [];
                 for (const user of jsonResponse) {
-                    const userReviews = user.rates.filter(review => review.Title === movie.Title)
-                        .map(review => ({
-                            ...review,
-                            username: user.username // Embedding the username into each review object
-                        }));
-
-                    allUsersReviews.push(...userReviews);
+                    if (friendsUsernames.includes(user.username)) {
+                        const userReviews = user.rates.filter(review => review.Title === movie.Title)
+                            .map(review => ({
+                                ...review,
+                                username: user.username // Add username into each review object
+                            }));
+                        friendReviews.push(...userReviews);
+                    }
                 }
 
-                console.log(allUsersReviews);
-                setReviews(allUsersReviews);
+                console.log(friendReviews);
+                setReviews(friendReviews);
             } catch (error) {
                 console.error('Error loading reviews:', error);
             }
         };
 
         loadReviews();
-    }, [movie.Title]);
+    }, [movie.Title, username]);
 
 
 
@@ -181,60 +178,71 @@ const ReviewsPage = ({ route, navigation }) => {
             Rating: userRating,
             Text: reviewText,
         };
-
+    
         const loadUrl = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater}';
         const saveUrl = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/savejson.php?user={movierater}';
-
+    
         try {
             const loadResponse = await fetch(loadUrl);
-
+    
             if (!loadResponse.ok) {
                 throw new Error('Network response was not ok');
             }
-
+    
             const userProfile = await loadResponse.json();
-
+    
             if (!userProfile) {
                 console.log('Response is empty');
                 return;
             }
-
+    
             const existingUser = userProfile.find(userJSON => userJSON.username === username);
-
+    
             if (existingUser) {
-                const updatedReviews = existingUser.rates || []; // Initialize as empty array if 'rates' doesn't exist
-                updatedReviews.push(newReviewData);
-                existingUser.rates = updatedReviews;
-
+                const existingReviewIndex = existingUser.rates.findIndex(review => review.Title === movie.Title);
+    
+                if (existingReviewIndex !== -1) {
+                    // User has already reviewed this movie, update the review
+                    existingUser.rates[existingReviewIndex] = newReviewData;
+                    alert('Your previous review has been updated!');
+                } else {
+                    // User hasn't reviewed this movie, add a new review
+                    existingUser.rates.push(newReviewData);
+                }
+    
                 // Deep clone the userProfile before sending it
                 const updatedProfile = JSON.parse(JSON.stringify(userProfile));
-
+    
                 const requestOptions = {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(updatedProfile), // Send the modified copy
                 };
-
+    
                 const saveResponse = await fetch(saveUrl, requestOptions);
-
+    
                 if (!saveResponse.ok) {
                     throw new Error('Failed to save review data');
                 }
-
-                // Update local state with the new review
-                const newReviewDataWithUsername = {
-                    ...newReviewData,
-                    username: username,
-                };
-                setReviews(prevReviews => [...prevReviews, newReviewDataWithUsername]);
-
+    
+                // Update local state with the new or updated review
+                setReviews(prevReviews => {
+                    const updatedReviews = [...prevReviews];
+                    if (existingReviewIndex !== -1) {
+                        updatedReviews[existingReviewIndex] = {...newReviewData, username: username};
+                    } else {
+                        updatedReviews.push({...newReviewData, username: username});
+                    }
+                    return updatedReviews;
+                });
+    
                 // Reset inputs and set submission state
                 setReviewText('');
                 setUserRating(0);
                 setIsSubmitted(true);
-
+    
                 setTimeout(() => setIsSubmitted(false), 3000);
-
+    
                 console.log("Review data successfully updated on server");
             } else {
                 console.log('User not found');

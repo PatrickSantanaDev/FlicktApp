@@ -12,8 +12,9 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: color4,
     flex:1,
-    paddingTop: 5,
-    marginTop: StatusBar.currentHeight
+    paddingTop: 25,
+    padding: 10,
+    //marginTop: StatusBar.currentHeight
   },
   
   item: {

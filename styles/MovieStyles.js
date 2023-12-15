@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
 // Home Page Styling
   container: {
     flex: 1,
-    // paddingTop: 50,
+    //paddingTop: 50,
     backgroundColor: '#ecf0f1',
   },
   carousel: {

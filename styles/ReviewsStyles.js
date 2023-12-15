@@ -7,9 +7,10 @@ export default StyleSheet.create({
     container: {
         flex: 1,
         // backgroundColor: '#FFCCCC',
-        marginTop: 50,
+        //marginTop: 50,
         // borderRadius: 5,
-        borderWidth: 5,
+        //borderWidth: 5,
+        paddingTop: 10,
         borderColor: 'black',
     },
     titleContainer: {
