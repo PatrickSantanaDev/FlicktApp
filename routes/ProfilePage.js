@@ -66,7 +66,7 @@ const ProfilePage = ({ user }) => {
     const[rates,setRates]=useState([])
     const[viewed,setViewed] = useState([])
     const[avatar,setAvatar] = useState('https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png')
-    const[badge,setBadge] = useState('https://www.pngall.com/wp-content/uploads/14/Loading-PNG-Photo.png');
+    const[badge,setBadge] = useState(emptyBadge);
 
     const navigation = useNavigation();
     const OMDB_API_KEY = '942c9b75';
@@ -106,8 +106,8 @@ const ProfilePage = ({ user }) => {
 
         const urlAddress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater}';
         loadList(urlAddress);
-        const save = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/savejson.php?user={movierater}';
-        console.log(save);
+        //const save = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/savejson.php?user={movierater}';
+        //console.log(save);
         //saveList(save,user);
 
 
@@ -171,14 +171,6 @@ const ProfilePage = ({ user }) => {
         </View>
 
     );
-    const renderBadgeImage = () => {
-        if (typeof badge === 'string' && badge.trim() !== '') {
-            return <Image source={{ uri: badge }} style={profileStyles.profileImage} />;
-        } else {
-            // Return a default or empty image when the badge URL is not valid
-            return <Image source={emptyBadge} style={profileStyles.profileImage} />;
-        }
-    };
 
     return (
         <View style={profileStyles.container}>
@@ -191,7 +183,7 @@ const ProfilePage = ({ user }) => {
             <View style={profileStyles.userInfo}>
                 <View style={profileStyles.avatarContainer}>
                     <Image source={{uri: avatar}} style={profileStyles.profileImage} />
-                    {renderBadgeImage()}
+                    {badge && <Image source={badge} style={{ width: 50, height: 50 }} />}
                 </View>
             </View>
             <View style={profileStyles.userInfo}>
