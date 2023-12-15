@@ -8,7 +8,7 @@ const ReviewsPage = ({ route, navigation }) => {
     const [userRating, setUserRating] = useState(0);
     const [reviews, setReviews] = useState([]);
     const [isSubmitted, setIsSubmitted] = useState(false);
-    const[isRec,setIsRec] = useState(false);
+    const [isRec, setIsRec] = useState(false);
     const movie = route.params.movie;
     const username = route.params.user.username;
     const handleDeleteAllReviews = async () => {
@@ -33,14 +33,14 @@ const ReviewsPage = ({ route, navigation }) => {
         if (reviews.length === 0) {
             return 0; // No reviews, return 0
         }
-    
+
         // Sum all the ratings for the specific movie
         const totalRating = reviews.reduce((sum, review) => sum + review.Rating, 0);
-    
+
         // Divide the total rating by the number of reviews to get the average
         return totalRating / reviews.length;
     };
-    
+
 
     // Render stars based on the average user rating
     const renderAverageRatingStars = () => {
@@ -178,29 +178,29 @@ const ReviewsPage = ({ route, navigation }) => {
             Rating: userRating,
             Text: reviewText,
         };
-    
+
         const loadUrl = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater}';
         const saveUrl = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/savejson.php?user={movierater}';
-    
+
         try {
             const loadResponse = await fetch(loadUrl);
-    
+
             if (!loadResponse.ok) {
                 throw new Error('Network response was not ok');
             }
-    
+
             const userProfile = await loadResponse.json();
-    
+
             if (!userProfile) {
                 console.log('Response is empty');
                 return;
             }
-    
+
             const existingUser = userProfile.find(userJSON => userJSON.username === username);
-    
+
             if (existingUser) {
                 const existingReviewIndex = existingUser.rates.findIndex(review => review.Title === movie.Title);
-    
+
                 if (existingReviewIndex !== -1) {
                     // User has already reviewed this movie, update the review
                     existingUser.rates[existingReviewIndex] = newReviewData;
@@ -209,40 +209,40 @@ const ReviewsPage = ({ route, navigation }) => {
                     // User hasn't reviewed this movie, add a new review
                     existingUser.rates.push(newReviewData);
                 }
-    
+
                 // Deep clone the userProfile before sending it
                 const updatedProfile = JSON.parse(JSON.stringify(userProfile));
-    
+
                 const requestOptions = {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(updatedProfile), // Send the modified copy
                 };
-    
+
                 const saveResponse = await fetch(saveUrl, requestOptions);
-    
+
                 if (!saveResponse.ok) {
                     throw new Error('Failed to save review data');
                 }
-    
+
                 // Update local state with the new or updated review
                 setReviews(prevReviews => {
                     const updatedReviews = [...prevReviews];
                     if (existingReviewIndex !== -1) {
-                        updatedReviews[existingReviewIndex] = {...newReviewData, username: username};
+                        updatedReviews[existingReviewIndex] = { ...newReviewData, username: username };
                     } else {
-                        updatedReviews.push({...newReviewData, username: username});
+                        updatedReviews.push({ ...newReviewData, username: username });
                     }
                     return updatedReviews;
                 });
-    
+
                 // Reset inputs and set submission state
                 setReviewText('');
                 setUserRating(0);
                 setIsSubmitted(true);
-    
+
                 setTimeout(() => setIsSubmitted(false), 3000);
-    
+
                 console.log("Review data successfully updated on server");
             } else {
                 console.log('User not found');
@@ -281,7 +281,7 @@ const ReviewsPage = ({ route, navigation }) => {
                 <Image source={{ uri: movie.Poster }} style={styles.moviePoster} />
             </View>
             <View style={styles.reviewsContainer}>
-            <Text style={styles.friendReviewsHeader}>Friend Reviews:</Text>
+                <Text style={styles.friendReviewsHeader}>Friend Reviews:</Text>
                 <ScrollView nestedScrollEnabled={true}>
                     {reviews.map((review, index) => (
                         <View key={index} style={styles.reviewItem}>
@@ -312,13 +312,13 @@ const ReviewsPage = ({ route, navigation }) => {
                         {isSubmitted ? "Success!" : "Submit"}
                     </Text>
                 </TouchableOpacity>
-                <Text/>
+                <Text />
                 <TouchableOpacity style={styles.submitButton} onPress={handleRec}>
-                <Text style={styles.submitButtonText}>
-                    {isRec ? "Delete Recommendation" : "Add Recommendation"}
-                </Text>
+                    <Text style={styles.submitButtonText}>
+                        {isRec ? "Delete Recommendation" : "Add Recommendation"}
+                    </Text>
 
-            </TouchableOpacity>
+                </TouchableOpacity>
                 {/* <TouchableOpacity style={styles.deleteButton} onPress={handleDeleteAllReviews}>
                     <Text style={styles.deleteButtonText}>Delete All Reviews</Text>
                 </TouchableOpacity> */}
