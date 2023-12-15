@@ -118,15 +118,15 @@ const ProfilePage = ({ user ,TopUser }) => {
     useEffect(() => {
         const total = movies.length + rates.length;
 
-        if (total >= 10000) {
+        if (total >= 20) {
             setBadge(gem5Badge);
-        } else if (total >= 5000) {
+        } else if (total >= 15) {
             setBadge(gem4Badge);
-        } else if (total >= 1000) {
+        } else if (total >= 10) {
             setBadge(gem3Badge);
-        } else if (total >= 500) {
+        } else if (total >= 5) {
             setBadge(gem2Badge);
-        } else if (total >= 100) {
+        } else if (total >= 1) {
             setBadge(gem1Badge);
         } else {
             setBadge(emptyBadge);
