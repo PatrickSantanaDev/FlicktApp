@@ -54,7 +54,7 @@ import gem4Badge from '../assets/badges/gem4.png';
 import gem5Badge from '../assets/badges/gem5.png';
 import emptyBadge from '../assets/badges/empty.png';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import {saveList} from "../components/SaveAndLoad";
+import ImageButton from "../components/ImageButton";
 //import {saveList} from "../components/SaveAndLoad";
 
 
@@ -68,7 +68,6 @@ const ProfilePage = ({ user ,TopUser }) => {
     const[viewed,setViewed] = useState([])
     const[avatar,setAvatar] = useState('https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png')
     const[badge,setBadge] = useState(emptyBadge);
-
     const navigation = useNavigation();
     const OMDB_API_KEY = '942c9b75';
     async function loadList(url) {
@@ -173,14 +172,44 @@ const ProfilePage = ({ user ,TopUser }) => {
         </View>
     );
     const renderFriend = ({ item }) => (
-        <View >
-            <View >
-                <Image source={{uri:item.image}} style={profileStyles.friendImage} />
+
+
+            <View  >
+                <ImageButton image={item.image} label={item.username} click={()=>seeFriendProfile(item)}> </ImageButton>
             </View>
-            <Text style={profileStyles.userInfo}>{item.username}</Text>
-        </View>
+
 
     );
+    async function seeFriendProfile(item) {
+        console.log(item);
+        const url = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater}';
+        try {
+            const response = await fetch(url);
+            if (response.ok) {
+                const names = await response.json();
+                console.log("Names fetched from the server: ", names);
+
+                if (!Array.isArray(names)) {
+                    console.log("Error: The fetched data is not an array.");
+                    return;
+                }
+
+                console.log("Searching for a friend " + item.username);
+                const userFound = names.find(userJSON => userJSON.username === item.username);
+
+                if (userFound) {
+                    console.log("User found: ", userFound);
+                    navigation.push('Profile', { user: userFound });
+                } else {
+                    console.log("User couldn't be found. This person doesn't have any info.");
+                }
+            } else {
+                console.log("Server response not OK");
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     return (
         <View style={profileStyles.container}>
@@ -227,18 +256,19 @@ const ProfilePage = ({ user ,TopUser }) => {
             {/*Friends*/}
             <View style={profileStyles.userInfo}>
                 <Text style={profileStyles.label}>Friends:</Text>
-                <View style={profileStyles.iconsContainer}>
-                    <VirtualizedList
-                        data={friends}
-                        horizontal={true}
-                        showsHorizontalScrollIndicator={true}
-                        keyExtractor={(item, index) => index.toString()}
-                        renderItem={renderFriend}
-                        getItemCount={() => friends.length}
-                        getItem={(data, index) => data[index]}
-                        contentContainerStyle={profileStyles.listContainer}
-                    />
-                </View>
+
+                    <View style={profileStyles.iconsContainer}>
+
+                        <VirtualizedList
+                            horizontal={true}
+                            data={friends}
+                            renderItem={renderFriend}
+                            getItemCount={() => friends.length}
+                            getItem={(data, index) => data[index]}
+                            keyExtractor={(item, index) => index.toString()}
+                        />
+                    </View>
+
             </View>
 
             {/*Movies*/}
