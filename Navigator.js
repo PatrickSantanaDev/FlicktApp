@@ -31,7 +31,7 @@ function TabNavigator() {
     const defaultUser = {username:'Elijah'};
 
     const ProfileScreen = ({ navigation, route }) => {
-        const defaultUser = {username:'Elijah'};
+
         const  user  = route.params ? route.params : { user: defaultUser };
         console.log(user)
         return <LoadProfile navigation={navigation} route={route} user={defaultUser} />;
