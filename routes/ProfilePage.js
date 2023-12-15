@@ -54,6 +54,7 @@ import gem4Badge from '../assets/badges/gem4.png';
 import gem5Badge from '../assets/badges/gem5.png';
 import emptyBadge from '../assets/badges/empty.png';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import {saveList} from "../components/SaveAndLoad";
 //import {saveList} from "../components/SaveAndLoad";
 
 
@@ -101,6 +102,8 @@ const ProfilePage = ({ user }) => {
 
         const urlAddress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater}';
         loadList(urlAddress);
+        //const save = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/savejson.php?user={movierater}';
+       //saveList(save,user);
     }, [user.username]);
 
     useEffect(() => {
