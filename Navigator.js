@@ -28,7 +28,7 @@ const Tab = createBottomTabNavigator();
 
 function TabNavigator() {
     //const user = [{"name":"Elijah Meldrim","username":"Elijah","avatar":"https://cdn-icons-png.flaticon.com/512/147/147142.png","interests":[{"key":1,"Type":"Action"},{"key":2,"Type":"Comedy"},{"key":3,"Type":"Drama"}],"friends":[],"recMovies":[],"rates":[],"viewed":[]},{"name":"Onur Keles","username":"Onur","avatar":"https://cdn-icons-png.flaticon.com/512/147/147142.png","interests":[{"key":1,"Type":"Action"}, {"key":2,"Type":"Thriller"}, {"key":3,"Type":"Comedy"}],"friends":[],"recMovies":[],"rates":[],"viewed":[]}, {"name":"Patrick Santana","username":"Patrick","avatar":"https://cdn-icons-png.flaticon.com/512/147/147144.png","interests":[{"key":1,"Type":"Action"},{ "key":2,"Type":"Thriller"},{"key":3,"Type":"Comedy"}],"friends":[],"recMovies":[],"rates":[],"viewed":[]}, {"name":"Gunnar Vittrup","username":"Gunnar","avatar":"https://cdn-icons-png.flaticon.com/512/147/147133.png","interests":[{"key":1,"Type":"Action"}, {"key":2,"Type":"Thriller"}, {"key":3,"Type":"Comedy"}],"friends":[{"key":"test","selected":false,"username":"test","image":"https://cdn-icons-png.flaticon.com/512/147/147142.png"}],"recMovies":[],"rates":[],"viewed":[]}];
-    const defaultUser = {username:'Elijah'};
+    const defaultUser = {username:'Onur'};
 
     const ProfileScreen = ({ navigation, route }) => {
 
@@ -71,12 +71,7 @@ function TabNavigator() {
             <Tab.Screen name="Movies" component={LoadMoviePage} />
             <Tab.Screen
                 name="Profile"
-                options={{
-                    tabBarIcon: ({ focused, color, size }) => {
-                        // Your icon settings
-                    },
-                    // Other options for the tab
-                }}
+
                 listeners={({ navigation, route }) => ({
                     tabPress: (e) => {
                         // Pass the user object when navigating to the ProfileScreen
