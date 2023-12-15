@@ -172,13 +172,11 @@ const ProfilePage = ({ user ,TopUser }) => {
         </View>
     );
     const renderFriend = ({ item }) => (
-
-
-            <View  >
-                <ImageButton image={item.image} label={item.username} click={()=>seeFriendProfile(item)}> </ImageButton>
-            </View>
-
-
+        <View>
+        <View style={profileStyles.friendContainer} >
+            <ImageButton image={item.image} label={item.username} click={() => seeFriendProfile(item)} />
+        </View>
+        </View>
     );
     async function seeFriendProfile(item) {
         console.log(item);
@@ -262,10 +260,12 @@ const ProfilePage = ({ user ,TopUser }) => {
                         <VirtualizedList
                             horizontal={true}
                             data={friends}
+                            howsHorizontalScrollIndicator={true}
                             renderItem={renderFriend}
                             getItemCount={() => friends.length}
                             getItem={(data, index) => data[index]}
                             keyExtractor={(item, index) => index.toString()}
+                            contentContainerStyle={profileStyles.listContainer}
                         />
                     </View>
 

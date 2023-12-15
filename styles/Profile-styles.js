@@ -8,10 +8,6 @@ TODO:
 import {StyleSheet, Dimensions} from 'react-native';
 
 
-var color1 = "background-color:rgb(255, 80, 80);";
-var color2 = "background-color:rgb(230, 58, 58);";
-var color3 = "background-color:rgb(64, 64, 64);";
-var outlinecolor1 = "background-color:rgb(255, 20, 200);";
 var color4 = "background-color:rgb(213, 213, 213);";
 
 const profileStyles = StyleSheet.create({
@@ -24,6 +20,13 @@ const profileStyles = StyleSheet.create({
         backgroundColor: color4,
         height: Dimensions.get('window').height * 1.1,
 
+    },
+    friendContainer: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        flexWrap: 'wrap',
+        marginRight: 10,
     },
 
     header: {
