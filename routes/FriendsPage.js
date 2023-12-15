@@ -1,19 +1,19 @@
-import React, {useEffect, useState} from 'react';
-import {Alert, Button, TextInput, View} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Alert, Button, TextInput, View } from 'react-native';
 
 import styles from '../styles/FriendsStyles.js'
 import Friend from '../components/Friend.js';
-import {saveList} from "../components/SaveAndLoad";
-import {useFocusEffect} from "@react-navigation/native";
+import { saveList } from "../components/SaveAndLoad";
+import { useFocusEffect } from "@react-navigation/native";
 
-const VirtualListBasics = ({user}) => {
-  const[friends,setFriends]= useState([]);
-  const [aphoto, setPhoto] = useState('assets/snack-icon.png');
-  const urladress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater}';
-  const save = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/savejson.php?user={movierater}';
+const VirtualListBasics = ({ user }) => {
+    const [friends, setFriends] = useState([]);
+    const [aphoto, setPhoto] = useState('assets/snack-icon.png');
+    const urladress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater}';
+    const save = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/savejson.php?user={movierater}';
     const [showInput, setShowInput] = useState(false);
     const [searchText, setSearchText] = useState('');
-  //Get our user information to access their friends.
+    //Get our user information to access their friends.
     async function loadList(url) {
 
         const response = await fetch(url);
@@ -31,14 +31,14 @@ const VirtualListBasics = ({user}) => {
                 console.log("Problem");
         }
     }
-const [aUser,setaUser] = useState({});
-    const [showme,setShowme] = useState(false);
+    const [aUser, setaUser] = useState({});
+    const [showme, setShowme] = useState(false);
     useEffect(() => {
 
-      
-    loadList(urladress)
 
-}, []);
+        loadList(urladress)
+
+    }, []);
     useFocusEffect(
         React.useCallback(() => {
             const urlAddress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater}';
@@ -51,18 +51,54 @@ const [aUser,setaUser] = useState({});
     async function searchforFriend() {
         try {
             const response = await fetch(urladress);
+            if (!response.ok) {
+                console.log('Failed to fetch data!');
+                return;
+            }
 
-            if (response.ok) {
-                const names = await response.json();
+            const names = await response.json();
+            const foundUser = names.find(JSONuser => JSONuser.username === user.username);
+            if (!foundUser) {
+                console.log('User not found!');
+                return;
+            }
 
-                const foundUser = names.find(JSONuser => JSONuser.username === user.username);
+            const friendName = searchText.trim();
+            if (!friendName) {
+                console.log('Invalid friend name!');
+                return;
+            }
 
-                if (foundUser) {
-                    const friendName = searchText;
+            const foundFriend = names.find(JSONuser => JSONuser.username === friendName);
+            if (!foundFriend) {
+                console.log('Friend not found in the list!');
+                return;
+            }
 
-                    if (friendName) {
-                        const foundFriend = names.find(JSONuser => JSONuser.username === friendName);
-                        if (foundFriend && !foundUser.friends.find(JSONuser => JSONuser.username === friendName) && foundFriend !== foundUser) {
+            if (foundUser.friends.find(JSONuser => JSONuser.username === friendName)) {
+                console.log('Friend already exists in friends!');
+                return;
+            }
+
+            if (foundFriend === foundUser) {
+                console.log('Cannot add yourself as a friend!');
+                return;
+            }
+
+            //confirmation dialog popup
+            Alert.alert(
+                "Add Friend",
+                `Do you want to add ${friendName} as your friend?`,
+                [
+                    {
+                        text: "Cancel",
+                        onPress: () => console.log("Add friend cancelled."),
+                        style: "cancel"
+                    },
+                    {
+                        text: "OK",
+                        onPress: async () => {
+                            // add the friend
                             foundUser.friends.push({
                                 key: foundFriend.username,
                                 selected: false,
@@ -78,23 +114,16 @@ const [aUser,setaUser] = useState({});
                             await saveList(save, names);
                             await loadList(urladress);
                             console.log('Friend added successfully!');
-                        } else {
-                            console.log('Friend not found in the list or already exists in friends!');
                         }
-                    } else {
-                        console.log('Invalid friend name!');
                     }
-                } else {
-                    console.log('User not found!');
-                }
-            } else {
-                console.log('Failed to fetch data!');
-            }
+                ],
+                { cancelable: false }
+            );
         } catch (error) {
             console.error('Error occurred:', error);
-            // Handle the error or add appropriate error handling logic here
         }
     }
+
 
 
     const handleSearch = () => {
@@ -109,7 +138,7 @@ const [aUser,setaUser] = useState({});
         setShowInput(false);
     };
 
-  //simple list object created with Friends js
+    //simple list object created with Friends js
     /*const alist = <View style={styles.container}>
         <Friend friendList={friends} source={{uri: aphoto}}/>
         <Button title="Search" onPress={handleSearch}/>
@@ -128,7 +157,7 @@ const [aUser,setaUser] = useState({});
 
             <View style={styles.container}>
 
-                <Friend  friendList={friends} source={{uri: aphoto}}/>
+                <Friend friendList={friends} source={{ uri: aphoto }} />
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10 }}>
                 <TextInput
@@ -138,7 +167,7 @@ const [aUser,setaUser] = useState({});
                     value={searchText}
                 />
                 <Button
-                    title="Search"
+                    title="Search and Add Friend"
                     onPress={searchforFriend}
                     disabled={!searchText} // Disable the button if no text is entered
                 />
