@@ -21,6 +21,7 @@ const Friend = (props) => {
   if (showStats) {
     var allViewed = "";
     var allRated = "";
+    let i;
     console.log("Viewed:");
     console.log(viewed);
     
@@ -84,7 +85,7 @@ const Friend = (props) => {
             renderItem={renderItem}
             getItemCount={() => props.friendList.length}
             getItem={(data, index) => data[index]}
-              keyExtractor={(index) => index}
+            keyExtractor={(item, index) => index.toString()}
               />
         
         </View>
