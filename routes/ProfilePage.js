@@ -58,7 +58,7 @@ import {saveList} from "../components/SaveAndLoad";
 //import {saveList} from "../components/SaveAndLoad";
 
 
-const ProfilePage = ({ user }) => {
+const ProfilePage = ({ user  }) => {
 
     const [showStats, setShowStats] = useState(false);
     const [movies, setMovies] = useState([]);
@@ -99,7 +99,7 @@ const ProfilePage = ({ user }) => {
     // Mock user data for demonstration
     useEffect(() => {
 
-
+        console.log(user)
         const urlAddress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater}';
         loadList(urlAddress);
         //const save = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/savejson.php?user={movierater}';

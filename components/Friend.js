@@ -2,8 +2,12 @@ import styles from '../styles/FriendsStyles.js';
 import React, {useState} from 'react';
 import ImageButton from './ImageButton.js';
 import {Text, View, VirtualizedList} from 'react-native';
+import {useNavigation} from "@react-navigation/native";
+
 
 const Friend = (props) => {
+    const navigation = useNavigation();
+    const url = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater}';
   const renderItem = ({ item, index}) => {
     return (
       <View  style={{
@@ -46,34 +50,36 @@ const Friend = (props) => {
   }
   return null;
 };
-  async function seeFriendProfile(item) {
-   console.log(item);
-    const response = await fetch(props.aURL);
-   if (response.ok) {
+    async function seeFriendProfile(item) {
+        console.log(item);
+        try {
+            const response = await fetch(url);
+            if (response.ok) {
                 const names = await response.json();
+                console.log("Names fetched from the server: ", names);
+
+                if (!Array.isArray(names)) {
+                    console.log("Error: The fetched data is not an array.");
+                    return;
+                }
+
                 console.log("Searching for a friend " + item.username);
                 const userFound = names.find(userJSON => userJSON.username === item.username);
-                if(userFound)
-                console.log("searching found: " + userFound.username);
-                else {
-                  console.log("user couldn't found, this person doesn't have any info");
-                  return;
-                }
-                console.log("User Found is: ");
-                console.log(userFound);
 
-                setViewed(userFound.viewed);
-                setRates(userFound.rates);
- 
-   }
-  
-   //look for a user with this username, then get their movie information
-   //user = for loop: props.userdatabase[i].username == item.username
-   //set viewed with the user data setViewed(user.viewed)
-   //set rating with the user data setViewed(user.rates)
-   console.log("Page navigated to friend's profile");
-   setShowStats(!showStats);
- }
+                if (userFound) {
+                    console.log("User found: ", userFound);
+                    navigation.push('Profile', { user: userFound });
+                } else {
+                    console.log("User couldn't be found. This person doesn't have any info.");
+                    return;
+                }
+            } else {
+                console.log("Server response not OK");
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
  
  
 

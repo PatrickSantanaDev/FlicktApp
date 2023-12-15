@@ -25,17 +25,22 @@ const Tab = createBottomTabNavigator();
  * throughout a majority of the application.
  * @returns tab navigation component
  */
+
 function TabNavigator() {
     //const user = [{"name":"Elijah Meldrim","username":"Elijah","avatar":"https://cdn-icons-png.flaticon.com/512/147/147142.png","interests":[{"key":1,"Type":"Action"},{"key":2,"Type":"Comedy"},{"key":3,"Type":"Drama"}],"friends":[],"recMovies":[],"rates":[],"viewed":[]},{"name":"Onur Keles","username":"Onur","avatar":"https://cdn-icons-png.flaticon.com/512/147/147142.png","interests":[{"key":1,"Type":"Action"}, {"key":2,"Type":"Thriller"}, {"key":3,"Type":"Comedy"}],"friends":[],"recMovies":[],"rates":[],"viewed":[]}, {"name":"Patrick Santana","username":"Patrick","avatar":"https://cdn-icons-png.flaticon.com/512/147/147144.png","interests":[{"key":1,"Type":"Action"},{ "key":2,"Type":"Thriller"},{"key":3,"Type":"Comedy"}],"friends":[],"recMovies":[],"rates":[],"viewed":[]}, {"name":"Gunnar Vittrup","username":"Gunnar","avatar":"https://cdn-icons-png.flaticon.com/512/147/147133.png","interests":[{"key":1,"Type":"Action"}, {"key":2,"Type":"Thriller"}, {"key":3,"Type":"Comedy"}],"friends":[{"key":"test","selected":false,"username":"test","image":"https://cdn-icons-png.flaticon.com/512/147/147142.png"}],"recMovies":[],"rates":[],"viewed":[]}];
-    const user = {username:'Elijah'};
-    const LoadProfile = props => (
-        <ProfilePage user={user} />
-    );
+    const defaultUser = {username:'Elijah'};
+
+    const ProfileScreen = ({ navigation, route }) => {
+        const defaultUser = {username:'Elijah'};
+        const  user  = route.params ? route.params : { user: defaultUser };
+        console.log(user)
+        return <LoadProfile navigation={navigation} route={route} user={defaultUser} />;
+    };
     const LoadMoviePage = props =>(
-        <MoviesPage user={user} />
+        <MoviesPage user={defaultUser} />
      );
     const FriendsPageList = props => (
-        <FriendsPage user={user} />
+        <FriendsPage user={defaultUser} />
     );
     return (
         <Tab.Navigator
@@ -64,7 +69,24 @@ function TabNavigator() {
             <Tab.Screen name="Friends" component={FriendsPageList} />
             {/* <Tab.Screen name="Home" component={HomePage} /> */}
             <Tab.Screen name="Movies" component={LoadMoviePage} />
-            <Tab.Screen name="Profile" component={LoadProfile} />
+            <Tab.Screen
+                name="Profile"
+                options={{
+                    tabBarIcon: ({ focused, color, size }) => {
+                        // Your icon settings
+                    },
+                    // Other options for the tab
+                }}
+                listeners={({ navigation, route }) => ({
+                    tabPress: (e) => {
+                        // Pass the user object when navigating to the ProfileScreen
+                        e.preventDefault(); // Prevent the default action
+                        navigation.navigate('Profile', { user: defaultUser });
+                    },
+                })}
+                component={ProfileScreen}
+            />
+
         </Tab.Navigator>
     );
 }
@@ -80,11 +102,22 @@ function StackNavigator() {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Flickt" component={TabNavigator} />
             <Stack.Screen name="Reviews" component={ReviewsPage} />
+            <Stack.Screen name="Profile" component={LoadProfile} />
             <Stack.Screen name="Liked Movies" component={LikedMovies} />
         </Stack.Navigator>
     );
 }
+class LoadProfile extends React.Component {
 
+    render() {
+        console.log("in LOAD PROFILE -" );
+        console.log(this.props.route.params.user);
+        const  user  = this.props.route.params.user;
+        console.log("User -" );
+        console.log(user );
+        return <ProfilePage user={user} />;
+    }
+}
 /**
  * By exporting a default function, it allows us the ability to import it into other 
  * components throughout our application and use it as a tool.
