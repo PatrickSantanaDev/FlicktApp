@@ -56,8 +56,7 @@ const [aUser,setaUser] = useState({});
 
                     if (friendName) {
                         const foundFriend = names.find(JSONuser => JSONuser.username === friendName);
-
-                        if (foundFriend && !foundUser.friends.find(JSONuser => JSONuser.username === friendName)) {
+                        if (foundFriend && !foundUser.friends.find(JSONuser => JSONuser.username === friendName) && foundFriend !== foundUser) {
                             foundUser.friends.push({
                                 key: foundFriend.username,
                                 selected: false,

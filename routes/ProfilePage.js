@@ -55,7 +55,7 @@ import gem5Badge from '../assets/badges/gem5.png';
 import emptyBadge from '../assets/badges/empty.png';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import ImageButton from "../components/ImageButton";
-//import {saveList} from "../components/SaveAndLoad";
+
 
 
 const ProfilePage = ({ user ,TopUser }) => {
