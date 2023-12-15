@@ -45,8 +45,9 @@ const profileStyles = StyleSheet.create({
         resizeMode: 'cover', // or 'contain' or other resizeMode based on your design
     },
     listContainer:{
+        flexGrow: 1,
         flexDirection: 'row',
-        width: Dimensions.get('window').width * 0.95,
+        //width: Dimensions.get('window').width * 0.95,
         alignItems: 'center',
     },
     movieTitle: {
