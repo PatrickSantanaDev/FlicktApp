@@ -212,7 +212,7 @@ const ProfilePage = ({ user ,TopUser }) => {
 
                 if (userFound) {
                     console.log("User found: ", userFound);
-                    navigation.push('Profile', { user: userFound });
+                    navigation.push('Profile', { user: userFound, TopUser: TopUser });
                 } else {
                     console.log("User couldn't be found. This person doesn't have any info.");
                 }
