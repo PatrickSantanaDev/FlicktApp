@@ -69,6 +69,7 @@ const ProfilePage = ({ user ,TopUser }) => {
     const[viewed,setViewed] = useState([])
     const[avatar,setAvatar] = useState('https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png')
     const[badge,setBadge] = useState(emptyBadge);
+    const[isFriend,setIsFriend] = useState(false);
     const navigation = useNavigation();
     const OMDB_API_KEY = '942c9b75';
     async function loadList(url) {
@@ -78,12 +79,17 @@ const ProfilePage = ({ user ,TopUser }) => {
             const userFound = names.find(userJSON => userJSON.username === user.username);
 
             if (userFound) {
+                console.log(userFound)
                 setMovies(userFound.recMovies);
                 setFriends(userFound.friends);
                 setInterests(userFound.interests);
                 setRates(userFound.rates);
                 setAvatar(userFound.avatar);
                 setViewed(userFound.viewed);
+
+                if( userFound.friends.find(userJSON => userJSON.username === TopUser.username)){
+                    setIsFriend(true);
+                }
             }
         } catch (error) {
             console.error('Error loading user data:', error);
@@ -146,7 +152,7 @@ const ProfilePage = ({ user ,TopUser }) => {
         setShowStats(!showStats);
     };
     const renderRemove = () => {
-        if (user !== TopUser) {
+        if (isFriend) {
             return (
                 <Button
                     title={'Remove Friend'}
