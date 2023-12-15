@@ -45,7 +45,7 @@ example of what the php server gets
 
  */
 import React, {useEffect, useState} from 'react';
-import {View, Text, Button, Image, VirtualizedList, TouchableOpacity} from 'react-native';
+import {View, Text, Button, Image, VirtualizedList, TouchableOpacity, Animated} from 'react-native';
 import profileStyles from '../styles/Profile-styles.js'
 import gem1Badge from '../assets/badges/gem1.png';
 import gem2Badge from '../assets/badges/gem2.png';
@@ -53,7 +53,7 @@ import gem3Badge from '../assets/badges/gem3.png';
 import gem4Badge from '../assets/badges/gem4.png';
 import gem5Badge from '../assets/badges/gem5.png';
 import emptyBadge from '../assets/badges/empty.png';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 //import {saveList} from "../components/SaveAndLoad";
 
 
@@ -70,56 +70,63 @@ const ProfilePage = ({ user }) => {
 
     const navigation = useNavigation();
     const OMDB_API_KEY = '942c9b75';
+    async function loadList(url) {
+        try {
+            const response = await fetch(url);
+            const names = await response.json();
+            const userFound = names.find(userJSON => userJSON.username === user.username);
+
+            if (userFound) {
+                setMovies(userFound.recMovies);
+                setFriends(userFound.friends);
+                setInterests(userFound.interests);
+                setRates(userFound.rates);
+                setAvatar(userFound.avatar);
+                setViewed(userFound.viewed);
+            }
+        } catch (error) {
+            console.error('Error loading user data:', error);
+        }
+    }
+    useFocusEffect(
+        React.useCallback(() => {
+            const urlAddress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater}';
+            loadList(urlAddress);
+        }, [user.username])
+    );
 
     // Mock user data for demonstration
     useEffect(() => {
-        async function loadList(url) {
-            console.log(user.username)
-            const response = await fetch(url);
-            const names = await response.json();
-            console.log(names);
-            const userFound = names.find(userJSON => userJSON.username === user.username)
-            console.log(userFound.username)
 
-            setMovies(userFound.recMovies);
-            setFriends(userFound.friends);
-            setInterests(userFound.interests);
-            setRates(userFound.rates);
-            setAvatar(userFound.avatar);
-            setViewed(userFound.viewed);
-            const total = movies.length + rates.length;
-
-            if(total >= 10000){
-                setBadge(gem5Badge);
-            } else if(total >= 5000){
-                setBadge(gem4Badge);
-            }else if(total >= 1000){
-                setBadge(gem3Badge);
-            }else if(total >= 500){
-                setBadge(gem2Badge);
-            }else if(total >= 100){
-                setBadge(gem1Badge);
-            } else{
-                setBadge(emptyBadge);
-            }
-        }
 
         const urlAddress = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/loadjson.php?user={movierater}';
         loadList(urlAddress);
-        //const save = 'https://cs.boisestate.edu/~scutchin/cs402/codesnips/savejson.php?user={movierater}';
-        //console.log(save);
-        //saveList(save,user);
+    }, [user.username]);
 
+    useEffect(() => {
+        const total = movies.length + rates.length;
 
-
-    }, []);
+        if (total >= 10000) {
+            setBadge(gem5Badge);
+        } else if (total >= 5000) {
+            setBadge(gem4Badge);
+        } else if (total >= 1000) {
+            setBadge(gem3Badge);
+        } else if (total >= 500) {
+            setBadge(gem2Badge);
+        } else if (total >= 100) {
+            setBadge(gem1Badge);
+        } else {
+            setBadge(emptyBadge);
+        }
+    }, [movies, rates]);
 
     const handleSelectMovie = async (movie) => {
         try {
             const response = await fetch(`http://www.omdbapi.com/?i=${movie.imdbID}&apikey=${OMDB_API_KEY}`);
             if (response.ok) {
                 const detailedMovie = await response.json();
-                navigation.navigate('Reviews', { movie: detailedMovie, user:user });
+                navigation.push('Reviews', { movie: detailedMovie, user: user });
                 return;
             }
             console.error("NETWORK ERROR FAILED TO LOAD DATA");
@@ -234,7 +241,8 @@ const ProfilePage = ({ user }) => {
             {/*Movies*/}
             <View style={profileStyles.userInfo}>
                 <Text style={profileStyles.label}>Recommended Movies:</Text>
-                <View style={profileStyles.iconsContainer}>
+
+                <Animated.View style={profileStyles.iconsContainer}>
 
                     <VirtualizedList
                         data={movies}
@@ -247,7 +255,7 @@ const ProfilePage = ({ user }) => {
                         contentContainerStyle={profileStyles.listContainer}
                     />
 
-                </View>
+                </Animated.View>
             </View>
 
         </View>
