@@ -3,7 +3,7 @@ import {View} from 'react-native';
 
 import styles from '../styles/FriendsStyles.js'
 import Friend from '../components/Friend.js';
-
+import {saveList} from "../components/SaveAndLoad";
 
                 
 const VirtualListBasics = ({user}) => {
