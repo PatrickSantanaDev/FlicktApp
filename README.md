@@ -2,14 +2,13 @@
 
 ## Contributors
 
+- [Patrick Santana](PatrickSantanaDev)
 - [Elijah Meldrim](EliMeldrim)
 - [Gunnar Vittrup](gvittrup)
-- [Patrick Santana](PatrickSantanaDev)
-- [Onur Keles](OnurKeles4)
 
-## Source
+## Description
 
-This project was designed for CS402 - Mobile Development, taught by Dr. Steve Cutchin beneath Boise State University for the Fall semester of 2023.
+Flickt is a mobile app designed for movie enthusiasts to review films and connect with friends over shared cinematic interests. The intuitive interface allows for easy navigation to discover and like movies, view friend-generated ratings, and compile a list of favorites. Emphasizing social interaction, Flickt doubles as a platform for users to compare movie choices, earn badges, and curate personalized recommendations.
 
 ## Prerequisites
 
