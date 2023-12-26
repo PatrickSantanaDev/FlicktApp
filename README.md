@@ -1,4 +1,4 @@
-# CS 402 Final Project - Team 6
+# Flickt App
 
 ## Contributors
 
